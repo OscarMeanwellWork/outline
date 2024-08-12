@@ -2,26 +2,32 @@ name: Sync Fork with Upstream
 
 on:
   schedule:
-    - cron: '0 0 * * *'  # Runs daily at midnight UTC
-  workflow_dispatch:  # Allows manual triggering of the workflow
+    - cron: '0 0 * * *'
+  workflow_dispatch:
 
 jobs:
-  merge:
+  sync:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - name: Merge upstream
-        run: |
-          git config --global user.name 'Oscar Meanwell'
-          git config --global user.email 'oscar@gearedapp.co.uk'
-          git checkout main
-          git pull --unshallow  
-          git remote add upstream https://github.com/outline/outline.git
-          git fetch upstream
-          git checkout -b feature/x origin/feature/x
-          git merge --no-edit upstream/feature/x
-          git push origin feature/x
+      - name: Checkout the fork repository
+        uses: actions/checkout@v3
+        with:
+          repository: ${{ github.repository }}
+          token: ${{ secrets.PAT }}
 
-          git checkout main
-          git merge --no-edit upstream/main
-          git push origin main
+      - name: Set up Git
+        run: |
+          git config --global user.email "oscar@gearedapp.co.uk"
+          git config --global user.name "Oscar Meanwell"
+
+      - name: Add the upstream repository
+        run: git remote add upstream https://github.com/outline/outline.git
+
+      - name: Fetch upstream changes
+        run: git fetch upstream
+
+      - name: Merge upstream/main into fork/main
+        run: git merge upstream/main
+
+      - name: Push changes to origin
+        run: git push origin main

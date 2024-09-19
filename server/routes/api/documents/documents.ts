@@ -54,7 +54,6 @@ import SearchHelper from "@server/models/helpers/SearchHelper";
 import { TextHelper } from "@server/models/helpers/TextHelper";
 import { authorize, can, cannot } from "@server/policies";
 import {
-  presentCollection,
   presentDocument,
   presentPolicies,
   presentMembership,
@@ -1183,7 +1182,8 @@ router.post(
   transaction(),
   async (ctx: APIContext<T.DocumentsMoveReq>) => {
     const { transaction } = ctx.state;
-    const { id, collectionId, parentDocumentId, index } = ctx.input.body;
+    const { id, parentDocumentId, index } = ctx.input.body;
+    let collectionId = ctx.input.body.collectionId;
     const { user } = ctx.state.auth;
     const document = await Document.findByPk(id, {
       userId: user.id,
@@ -1198,7 +1198,7 @@ router.post(
       authorize(user, "updateDocument", collection);
     } else if (document.template) {
       authorize(user, "updateTemplate", user.team);
-    } else {
+    } else if (!parentDocumentId) {
       throw InvalidRequestError("collectionId is required to move a document");
     }
 
@@ -1208,13 +1208,14 @@ router.post(
         transaction,
       });
       authorize(user, "update", parent);
+      collectionId = parent.collectionId;
 
       if (!parent.publishedAt) {
         throw InvalidRequestError("Cannot move document inside a draft");
       }
     }
 
-    const { documents, collections, collectionChanged } = await documentMover({
+    const { documents, collectionChanged } = await documentMover({
       user,
       document,
       collectionId: collectionId ?? null,
@@ -1227,11 +1228,10 @@ router.post(
     ctx.body = {
       data: {
         documents: await Promise.all(
-          documents.map((document) => presentDocument(ctx, document))
+          documents.map((doc) => presentDocument(ctx, doc))
         ),
-        collections: await Promise.all(
-          collections.map((collection) => presentCollection(ctx, collection))
-        ),
+        // Included for backwards compatibility
+        collections: [],
       },
       policies: collectionChanged ? presentPolicies(user, documents) : [],
     };

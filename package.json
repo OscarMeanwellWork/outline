@@ -17,6 +17,7 @@
     "prepare": "husky install",
     "postinstall": "yarn patch-package",
     "install-local-ssl": "node ./server/scripts/install-local-ssl.js",
+    "release": "node ./server/scripts/release.js",
     "heroku-postbuild": "yarn build && yarn db:migrate",
     "db:create-migration": "sequelize migration:create",
     "db:create": "sequelize db:create",
@@ -366,5 +367,5 @@
     "qs": "6.9.7",
     "rollup": "^4.5.1"
   },
-  "version": "0.79.1"
+  "version": "0.80.1"
 }

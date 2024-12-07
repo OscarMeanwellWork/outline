@@ -12,6 +12,7 @@ import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import styled, { useTheme } from "styled-components";
 import { NavigationNode } from "@shared/types";
+import { altDisplay, metaDisplay } from "@shared/utils/keyboard";
 import { Theme } from "~/stores/UiStore";
 import Document from "~/models/Document";
 import Revision from "~/models/Revision";
@@ -35,6 +36,7 @@ import useCurrentTeam from "~/hooks/useCurrentTeam";
 import useCurrentUser from "~/hooks/useCurrentUser";
 import useEditingFocus from "~/hooks/useEditingFocus";
 import useKeyDown from "~/hooks/useKeyDown";
+import { useLocationSidebarContext } from "~/hooks/useLocationSidebarContext";
 import useMobile from "~/hooks/useMobile";
 import usePolicy from "~/hooks/usePolicy";
 import useStores from "~/hooks/useStores";
@@ -42,7 +44,6 @@ import DocumentMenu from "~/menus/DocumentMenu";
 import NewChildDocumentMenu from "~/menus/NewChildDocumentMenu";
 import TableOfContentsMenu from "~/menus/TableOfContentsMenu";
 import TemplatesMenu from "~/menus/TemplatesMenu";
-import { altDisplay, metaDisplay } from "~/utils/keyboard";
 import { documentEditPath } from "~/utils/routeHelpers";
 import ObservingBanner from "./ObservingBanner";
 import PublicBreadcrumb from "./PublicBreadcrumb";
@@ -91,6 +92,7 @@ function DocumentHeader({
   const isRevision = !!revision;
   const isEditingFocus = useEditingFocus();
   const { hasHeadings, editor } = useDocumentContext();
+  const sidebarContext = useLocationSidebarContext();
   const ref = React.useRef<HTMLDivElement | null>(null);
   const size = useComponentSize(ref);
   const isMobile = isMobileMedia || size.width < 700;
@@ -132,7 +134,7 @@ function DocumentHeader({
           ? t("Show contents")
           : `${t("Show contents")} (${t("available when headings are added")})`
       }
-      shortcut={`ctrl+${altDisplay}+h`}
+      shortcut={`Ctrl+${altDisplay}+h`}
       placement="bottom"
     >
       <Button
@@ -155,7 +157,10 @@ function DocumentHeader({
         <Button
           as={Link}
           icon={<EditIcon />}
-          to={documentEditPath(document)}
+          to={{
+            pathname: documentEditPath(document),
+            state: { sidebarContext },
+          }}
           neutral
         >
           {isMobile ? null : t("Edit")}

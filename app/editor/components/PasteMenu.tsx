@@ -9,7 +9,7 @@ import SuggestionsMenuItem from "./SuggestionsMenuItem";
 
 type Props = Omit<
   SuggestionsMenuProps,
-  "renderMenuItem" | "items" | "embeds"
+  "renderMenuItem" | "items" | "embeds" | "trigger"
 > & {
   pastedText: string;
   embeds: EmbedDescriptor[];
@@ -31,7 +31,7 @@ const PasteMenu = ({ embeds, ...props }: Props) => {
   const items = React.useMemo(
     () => [
       {
-        name: "link",
+        name: "noop",
         title: t("Keep as link"),
         icon: <LinkIcon />,
       },
@@ -48,6 +48,7 @@ const PasteMenu = ({ embeds, ...props }: Props) => {
   return (
     <SuggestionsMenu
       {...props}
+      trigger=""
       filterable={false}
       renderMenuItem={(item, _index, options) => (
         <SuggestionsMenuItem

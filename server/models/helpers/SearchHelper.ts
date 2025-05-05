@@ -182,16 +182,16 @@ export default class SearchHelper {
       },
     ];
 
-    return Document.withMembershipScope(user.id)
-      .scope("withDrafts")
-      .findAll({
-        where,
-        subQuery: false,
-        order: [["updatedAt", "DESC"]],
-        include,
-        offset,
-        limit,
-      });
+    return Document.withMembershipScope(user.id, {
+      includeDrafts: true,
+    }).findAll({
+      where,
+      subQuery: false,
+      order: [["updatedAt", "DESC"]],
+      include,
+      offset,
+      limit,
+    });
   }
 
   public static async searchCollectionsForUser(
@@ -264,14 +264,12 @@ export default class SearchHelper {
 
       // Final query to get associated document data
       const [documents, count] = await Promise.all([
-        Document.withMembershipScope(user.id)
-          .scope("withDrafts")
-          .findAll({
-            where: {
-              teamId: user.teamId,
-              id: map(results, "id"),
-            },
-          }),
+        Document.withMembershipScope(user.id, { includeDrafts: true }).findAll({
+          where: {
+            teamId: user.teamId,
+            id: map(results, "id"),
+          },
+        }),
         results.length < limit && offset === 0
           ? Promise.resolve(results.length)
           : countQuery,

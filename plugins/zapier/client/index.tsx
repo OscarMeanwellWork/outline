@@ -8,11 +8,10 @@ PluginManager.add([
     ...config,
     type: Hook.Settings,
     value: {
-      group: "Workspace",
-      after: "Shared Links",
+      group: "Integrations",
       icon: Icon,
       description:
-        "Automate downstream workflows with real-time JSON POSTs, subscribe to events in Outline so external systems can react instantly.",
+        "Connect your Outline workspace to Zapier to automate workflows and integrate with thousands of other tools.",
       component: createLazyComponent(() => import("./Settings")),
     },
   },

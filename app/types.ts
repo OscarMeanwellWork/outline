@@ -134,7 +134,7 @@ type BaseActionV2 = {
   type: "action";
   id: string;
   analyticsName?: string;
-  name: ((context: ActionContext) => string) | string;
+  name: ((context: ActionContext) => React.ReactNode) | React.ReactNode;
   section: ((context: ActionContext) => string) | string;
   shortcut?: string[];
   keywords?: string;
@@ -143,7 +143,7 @@ type BaseActionV2 = {
   icon?: ((context: ActionContext) => React.ReactNode) | React.ReactNode;
   iconInContextMenu?: boolean;
   placeholder?: ((context: ActionContext) => string) | string;
-  selected?: (context: ActionContext) => boolean;
+  selected?: ((context: ActionContext) => boolean) | boolean;
   visible?: ((context: ActionContext) => boolean) | boolean;
   disabled?: ((context: ActionContext) => boolean) | boolean;
 };
@@ -151,12 +151,15 @@ type BaseActionV2 = {
 export type ActionV2 = BaseActionV2 & {
   variant: "action";
   dangerous?: boolean;
+  tooltip?:
+    | ((context: ActionContext) => React.ReactChild | undefined)
+    | React.ReactChild;
   perform: (context: ActionContext) => any;
 };
 
 export type InternalLinkActionV2 = BaseActionV2 & {
   variant: "internal_link";
-  to: LocationDescriptor;
+  to: ((context: ActionContext) => LocationDescriptor) | LocationDescriptor;
 };
 
 export type ExternalLinkActionV2 = BaseActionV2 & {

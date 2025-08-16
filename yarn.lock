@@ -5240,6 +5240,13 @@
   resolved "https://registry.yarnpkg.com/@types/prop-types/-/prop-types-15.7.4.tgz#fcf7205c25dff795ee79af1e30da2c9790808f11"
   integrity "sha1-/PcgXCXf95Xuea8eMNosl5CAjxE= sha512-rZ5drC/jWjrArrS8BR6SIr4cWpW09RNTYt9AMZo3Jwwif+iacXAqgVjm0B0Bv/S1jhDXKHqRVNCbACkJ89RAnQ=="
 
+"@types/proxy-from-env@^1.0.4":
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/@types/proxy-from-env/-/proxy-from-env-1.0.4.tgz#0a0545768f2d6c16b81a84ffefb53b423807907c"
+  integrity sha512-TPR9/bCZAr3V1eHN4G3LD3OLicdJjqX1QRXWuNcCYgE66f/K8jO2ZRtHxI2D9MbnuUP6+qiKSS8eUHp6TFHGCw==
+  dependencies:
+    "@types/node" "*"
+
 "@types/qs@*":
   version "6.9.7"
   resolved "https://registry.yarnpkg.com/@types/qs/-/qs-6.9.7.tgz#63bb7d067db107cc1e457c303bc25d511febf6cb"
@@ -6460,7 +6467,7 @@ chevrotain@~11.0.3:
     "@chevrotain/utils" "11.0.3"
     lodash-es "4.17.21"
 
-chokidar@^3.5.2, chokidar@^3.5.3, chokidar@^3.6.0:
+chokidar@^3.5.2, chokidar@^3.6.0:
   version "3.6.0"
   resolved "https://registry.yarnpkg.com/chokidar/-/chokidar-3.6.0.tgz#197c6cc669ef2a8dc5e7b4d97ee4e092c3eb0d5b"
   integrity sha512-7VT13fmjotKpGipCW9JEQAusEPE+Ei8nl6/g4FBAmIm0GOOLMua9NDDo/DWp0ZAxCr3cPq5ZpBqmPAQgDda2Pw==
@@ -8188,7 +8195,7 @@ fast-fifo@^1.3.2:
   resolved "https://registry.yarnpkg.com/fast-fifo/-/fast-fifo-1.3.2.tgz#286e31de96eb96d38a97899815740ba2a4f3640c"
   integrity sha512-/d9sfos4yxzpwkDkuN7k2SqFKtYNmCTzgfEpz82x34IM9/zc8KGxQoXg1liNC/izpRM/MBdt44Nmx41ZWqk+FQ==
 
-fast-glob@^3.2.11, fast-glob@^3.3.2:
+fast-glob@^3.3.2:
   version "3.3.2"
   resolved "https://registry.yarnpkg.com/fast-glob/-/fast-glob-3.3.2.tgz#a904501e57cfdd2ffcded45e99a54fef55e46129"
   integrity "sha1-qQRQHlfP3S/83tRemaVP71XkYSk= sha512-oX2ruAFQwf/Orj8m737Y5adxDQO0LAB7/S5MnxCdTNDd4p6BsyIVsv9JQsATbTSq8KHRpLwIHbVlUNatxd+1Ow=="
@@ -8244,16 +8251,6 @@ fetch-retry@^5.0.6:
   version "5.0.6"
   resolved "https://registry.yarnpkg.com/fetch-retry/-/fetch-retry-5.0.6.tgz#17d0bc90423405b7a88b74355bf364acd2a7fa56"
   integrity "sha1-F9C8kEI0Bbeoi3Q1W/NkrNKn+lY= sha512-3yurQZ2hD9VISAhJJP9bpYFNQrHHBXE2JxxjY5aLEcDi46RmAzJE2OC9FAde0yis5ElW0jTTzs0zfg/Cca4XqQ=="
-
-fetch-with-proxy@^3.0.1:
-  version "3.0.1"
-  resolved "https://registry.yarnpkg.com/fetch-with-proxy/-/fetch-with-proxy-3.0.1.tgz#29ed6d0e2550ef999d40b18de2ba476af4b7dee4"
-  integrity "sha1-Ke1tDiVQ75mdQLGN4rpHavS33uQ= sha512-8C5JZ+Ea2eTOkFuQhB252QPgEc68LS7+8uNrFbYFs7t114Bgdj7hiYmtwkHhmN8TvafGVRbspMMD/Rg/tw0RwA=="
-  dependencies:
-    node-abort-controller "^1.1.0"
-    node-fetch "^2.6.1"
-    proxy-from-env "^1.1.0"
-    tunnel-agent "^0.6.0"
 
 file-selector@^0.4.0:
   version "0.4.0"
@@ -10963,10 +10960,10 @@ makeerror@1.0.12:
   dependencies:
     tmpl "1.0.5"
 
-mammoth@^1.9.1:
-  version "1.9.1"
-  resolved "https://registry.yarnpkg.com/mammoth/-/mammoth-1.9.1.tgz#b544c26747a412b5b00a11aa80477c6796860eaf"
-  integrity sha512-4S2v1eP4Yo4so0zGNicJKcP93su3wDPcUk+xvkjSG75nlNjSkDJu8BhWQ+e54BROM0HfA6nPzJn12S6bq2Ko6w==
+mammoth@^1.10.0:
+  version "1.10.0"
+  resolved "https://registry.yarnpkg.com/mammoth/-/mammoth-1.10.0.tgz#88b4a76e6e6a636880cadee058daa7f244fe5da8"
+  integrity sha512-9HOmqt8uJ5rz7q8XrECU5gRjNftCq4GNG0YIrA6f9iQPCeLgpvgcmRBHi9NQWJQIpT/MAXeg1oKliAK1xoB3eg==
   dependencies:
     "@xmldom/xmldom" "^0.8.6"
     argparse "~1.0.3"
@@ -11312,11 +11309,6 @@ negotiator@0.6.3:
   version "0.6.3"
   resolved "https://registry.yarnpkg.com/negotiator/-/negotiator-0.6.3.tgz#58e323a72fedc0d6f9cd4d31fe49f51479590ccd"
   integrity sha512-+EUsqGPLsM+j/zdChZjsnX51g4XrHFOIXwfnCVPGlQk/k5giakcKsuxCObBRu6DSm9opw/O6slWbJdghQM4bBg==
-
-node-abort-controller@^1.1.0:
-  version "1.2.1"
-  resolved "https://registry.yarnpkg.com/node-abort-controller/-/node-abort-controller-1.2.1.tgz#1eddb57eb8fea734198b11b28857596dc6165708"
-  integrity "sha1-Ht21frj+pzQZixGyiFdZbcYWVwg= sha512-79PYeJuj6S9+yOHirR0JBLFOgjB6sQCir10uN6xRx25iD+ZD4ULqgRn3MwWBRaQGB0vEgReJzWwJo42T1R6YbQ=="
 
 node-abort-controller@^3.0.1:
   version "3.1.1"
@@ -11982,7 +11974,7 @@ pgpass@1.x:
   dependencies:
     split2 "^3.1.1"
 
-picocolors@^1.0.0, picocolors@^1.1.1:
+picocolors@^1.1.1:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/picocolors/-/picocolors-1.1.1.tgz#3d321af3eab939b083c8f929a1d12cda81c26b6b"
   integrity sha512-xceH2snhtb5M9liqDsmEw56le376mTZkEX/jEb/RxNFyegNul7eNslCXP9FDj/Lcu0X8KEyMceP2ntpaHrDEVA==
@@ -14730,26 +14722,16 @@ vinyl@^3.0.0, vinyl@~3.0.0:
     replace-ext "^2.0.0"
     teex "^1.0.1"
 
-vite-plugin-pwa@^0.21.2:
-  version "0.21.2"
-  resolved "https://registry.yarnpkg.com/vite-plugin-pwa/-/vite-plugin-pwa-0.21.2.tgz#5c6c37f52e96939ba899c5e571c12b7faccc6c49"
-  integrity sha512-vFhH6Waw8itNu37hWUJxL50q+CBbNcMVzsKaYHQVrfxTt3ihk3PeLO22SbiP1UNWzcEPaTQv+YVxe4G0KOjAkg==
+vite-plugin-pwa@^1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/vite-plugin-pwa/-/vite-plugin-pwa-1.0.2.tgz#ad70181256633c56ce7aa85c66377d916b9e8296"
+  integrity sha512-O3UwjsCnoDclgJANoOgzzqW7SFgwXE/th2OmUP/ILxHKwzWxxKDBu+B/Xa9Cv4IgSVSnj2HgRVIJ7F15+vQFkA==
   dependencies:
     debug "^4.3.6"
     pretty-bytes "^6.1.1"
     tinyglobby "^0.2.10"
     workbox-build "^7.3.0"
     workbox-window "^7.3.0"
-
-vite-plugin-static-copy@^0.17.0:
-  version "0.17.1"
-  resolved "https://registry.yarnpkg.com/vite-plugin-static-copy/-/vite-plugin-static-copy-0.17.1.tgz#0de35c4a4c760d5f344b5559d0a8d7d417a52093"
-  integrity "sha1-DeNcSkx2DV80S1VZ0KjX1BelIJM= sha512-9h3iaVs0bqnqZOM5YHJXGHqdC5VAVlTZ2ARYsuNpzhEJUHmFqXY7dAK4ZFpjEQ4WLFKcaN8yWbczr81n01U4sQ=="
-  dependencies:
-    chokidar "^3.5.3"
-    fast-glob "^3.2.11"
-    fs-extra "^11.1.0"
-    picocolors "^1.0.0"
 
 "vite@npm:rolldown-vite@latest":
   version "7.0.4"

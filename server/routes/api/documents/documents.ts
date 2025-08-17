@@ -2,6 +2,7 @@ import path from "path";
 import fractionalIndex from "fractional-index";
 import fs from "fs-extra";
 import invariant from "invariant";
+import contentDisposition from "content-disposition";
 import JSZip from "jszip";
 import Router from "koa-router";
 import escapeRegExp from "lodash/escapeRegExp";
@@ -60,7 +61,6 @@ import {
   presentDocument,
   presentPolicies,
   presentMembership,
-  presentPublicTeam,
   presentUser,
   presentGroupMembership,
   presentGroup,
@@ -74,7 +74,6 @@ import { APIContext } from "@server/types";
 import { RateLimiterStrategy } from "@server/utils/RateLimiter";
 import ZipHelper from "@server/utils/ZipHelper";
 import { getTeamFromContext } from "@server/utils/passport";
-import { navigationNodeToSitemap } from "@server/utils/sitemap";
 import { assertPresent } from "@server/validation";
 import pagination from "../middlewares/pagination";
 import * as T from "./schema";
@@ -775,7 +774,12 @@ router.post(
 
     if (attachments.length === 0) {
       ctx.set("Content-Type", contentType);
-      ctx.attachment(`${fileName}.${extension}`);
+      ctx.set(
+        "Content-Disposition",
+        contentDisposition(`${fileName}.${extension}`, {
+          type: "attachment",
+        })
+      );
       ctx.body = content;
       return;
     }
@@ -818,7 +822,12 @@ router.post(
     });
 
     ctx.set("Content-Type", "application/zip");
-    ctx.attachment(`${fileName}.zip`);
+    ctx.set(
+      "Content-Disposition",
+      contentDisposition(`${fileName}.zip`, {
+        type: "attachment",
+      })
+    );
     ctx.body = zip.generateNodeStream(ZipHelper.defaultStreamOptions);
   }
 );

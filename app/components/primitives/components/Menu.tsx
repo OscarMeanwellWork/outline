@@ -66,6 +66,7 @@ const BaseMenuItemCSS = css<BaseMenuItemProps>`
   ${(props) =>
     !props.disabled &&
     `
+      &[data-highlighted],
       &:focus-visible {
         color: ${props.theme.accentText};
         background: ${props.$dangerous ? props.theme.danger : props.theme.accent};
@@ -143,6 +144,9 @@ export const MenuIconWrapper = styled.span`
   margin-left: -4px;
   color: ${s("textSecondary")};
   flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `;
 
 export const SelectedIconWrapper = styled.span`
@@ -151,6 +155,9 @@ export const SelectedIconWrapper = styled.span`
   margin-right: -6px;
   color: ${s("textSecondary")};
   flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `;
 
 export const MenuContent = styled(Scrollable)<{

@@ -441,6 +441,9 @@ const textStyle = () => css`
     /* Burmese */
     p {
       line-height: 1.7;
+    }
+
+    .ProseMirror > p {
       margin-top: 0.8em;
       margin-bottom: 0.8em;
     }
@@ -460,6 +463,9 @@ const textStyle = () => css`
     /* Sinhala */
     p {
       line-height: 1.7;
+    }
+
+    .ProseMirror > p {
       margin-top: 0.8em;
       margin-bottom: 0.8em;
     }
@@ -469,6 +475,9 @@ const textStyle = () => css`
   :lang(bo) {
     p {
       line-height: 1.8;
+    }
+
+    .ProseMirror > p {
       margin-top: 0.8em;
       margin-bottom: 0.8em;
     }
@@ -491,6 +500,9 @@ const textStyle = () => css`
     /* Mongolian */
     p {
       line-height: 1.7;
+    }
+
+    .ProseMirror > p {
       margin-top: 0.8em;
       margin-bottom: 0.8em;
     }
@@ -529,7 +541,8 @@ width: 100%;
     background: ${props.theme.mentionHoverBackground};
   }
 
-  &[data-type="user"] {
+  &[data-type="user"],
+  &[data-type="group"] {
     gap: 0;
   }
 
@@ -574,7 +587,7 @@ width: 100%;
 
   & > :first-child,
   & > button:first-child + * {
-    margin-top: 0;
+    margin-top: 0 !important;
   }
 
   h1,

@@ -79,6 +79,12 @@ const mathStyle = (props: Props) => css`
     display: none;
     color: ${props.theme.codeStatement};
     tab-size: 4;
+
+    .ProseMirror-focused {
+      border-radius: 2px;
+      outline: 2px solid
+        ${props.readOnly ? "transparent" : props.theme.selected};
+    }
   }
 
   .math-node.ProseMirror-selectednode .math-src {
@@ -1676,6 +1682,7 @@ mark {
   }
 }
 
+.code-block[data-language=mermaid],
 .code-block[data-language=mermaidjs] {
   ${
     !props.staticHTML &&
@@ -1702,6 +1709,7 @@ mark {
   }
 }
 
+.ProseMirror[contenteditable="false"] .code-block[data-language=mermaid],
 .ProseMirror[contenteditable="false"] .code-block[data-language=mermaidjs] {
     height: 0;
     overflow: hidden;
@@ -1712,6 +1720,7 @@ mark {
 }
 
 .ProseMirror.exported {
+    .code-block[data-language=mermaid],
     .code-block[data-language=mermaidjs] {
         height: auto;
         overflow: visible;
@@ -2028,7 +2037,7 @@ table {
      * https://github.com/ProseMirror/prosemirror/issues/947 */
     &::after {
       content: "";
-      cursor: var(--pointer);
+      cursor: grab;
       position: absolute;
       top: -16px;
       left: 0;
@@ -2040,6 +2049,10 @@ table {
 
     &:hover::after {
       background: ${props.theme.text};
+    }
+
+    body.${EditorStyleHelper.tableDragging} &:hover::after {
+      background: ${props.theme.divider};
     }
     &.first::after {
       border-top-left-radius: 3px;
@@ -2058,7 +2071,7 @@ table {
   .${EditorStyleHelper.tableGripRow} {
     &::after {
       content: "";
-      cursor: var(--pointer);
+      cursor: grab;
       position: absolute;
       left: -16px;
       top: 0;
@@ -2071,6 +2084,10 @@ table {
 
     &:hover::after {
       background: ${props.theme.text};
+    }
+
+    body.${EditorStyleHelper.tableDragging} &:hover::after {
+      background: ${props.theme.divider};
     }
     &.first::after {
       border-top-left-radius: 3px;
@@ -2108,7 +2125,81 @@ table {
     &.selected::after {
       background: ${props.theme.tableSelected};
     }
+    &.dragging::after {
+      background: ${props.theme.accent};
+      opacity: 0.5;
+    }
   }
+}
+
+.${EditorStyleHelper.tableDragDropIndicator} {
+  position: absolute;
+  background: ${props.theme.accent};
+  pointer-events: none;
+  z-index: 100;
+  opacity: 0;
+  transition: opacity 100ms ease-in-out;
+
+  &.active {
+    opacity: 1;
+  }
+
+  &[data-type="row"] {
+    height: 2px;
+    border-radius: 1px;
+  }
+
+  &[data-type="column"] {
+    width: 2px;
+    border-radius: 1px;
+  }
+}
+
+.${EditorStyleHelper.tableGripRow},
+.${EditorStyleHelper.tableGripColumn} {
+  &.dragging::after {
+    cursor: grabbing;
+    background: ${props.theme.accent};
+    opacity: 0.5;
+  }
+}
+
+.${EditorStyleHelper.tableDragIndicatorLeft},
+.${EditorStyleHelper.tableDragIndicatorRight} {
+  position: absolute;
+  top: 0;
+  width: 2px;
+  height: calc(var(--table-height) - ${EditorStyleHelper.padding}px - 10px);
+  background: ${props.theme.accent};
+  z-index: 100;
+  pointer-events: none;
+}
+
+.${EditorStyleHelper.tableDragIndicatorLeft} {
+  left: -1px;
+}
+
+.${EditorStyleHelper.tableDragIndicatorRight} {
+  right: -1px;
+}
+
+.${EditorStyleHelper.tableDragIndicatorTop},
+.${EditorStyleHelper.tableDragIndicatorBottom} {
+  position: absolute;
+  left: 0;
+  height: 2px;
+  width: calc(var(--table-width) - ${EditorStyleHelper.padding * 2}px - 2px);
+  background: ${props.theme.accent};
+  z-index: 100;
+  pointer-events: none;
+}
+
+.${EditorStyleHelper.tableDragIndicatorTop} {
+  top: -1px;
+}
+
+.${EditorStyleHelper.tableDragIndicatorBottom} {
+  bottom: -1px;
 }
 
 .${EditorStyleHelper.table} {

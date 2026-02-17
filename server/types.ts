@@ -60,6 +60,8 @@ export type Authentication = {
   type?: AuthenticationType;
   /** The authentication service used to create this session (e.g., "email", "passkeys", "google"). */
   service?: string;
+  /** The OAuth scopes granted for this session, if applicable. */
+  scope?: string[];
 };
 
 export type Pagination = {
@@ -72,6 +74,7 @@ export type AppState = {
   auth: Authentication | Record<string, never>;
   transaction: Transaction;
   pagination: Pagination;
+  oauthClient?: OAuthClient;
 };
 
 export type AppContext = ParameterizedContext<AppState, DefaultContext>;
@@ -81,7 +84,7 @@ export type BaseReq = z.infer<typeof BaseSchema>;
 export type BaseRes = unknown;
 
 export interface APIContext<
-  ReqT = BaseReq,
+  ReqT = Partial<BaseReq>,
   ResT = BaseRes,
 > extends ParameterizedContext<
   AppState,

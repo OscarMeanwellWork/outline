@@ -6861,15 +6861,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tanstack/react-virtual@npm:^3.13.23":
-  version: 3.13.23
-  resolution: "@tanstack/react-virtual@npm:3.13.23"
+"@tanstack/react-virtual@npm:^3.13.24":
+  version: 3.13.24
+  resolution: "@tanstack/react-virtual@npm:3.13.24"
   dependencies:
-    "@tanstack/virtual-core": "npm:3.13.23"
+    "@tanstack/virtual-core": "npm:3.14.0"
   peerDependencies:
     react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
     react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
-  checksum: 10c0/a3e33463eb471067f9539858655bbefb99778f930156165afb0218fe5ffa181bc2e3dacfe3b6f655f1716d9994064f58ef009370975f801b4c83826aa33a5791
+  checksum: 10c0/f409b2bb67965a513b75a1403e622c0b86c88c67419f757c79f670615979e38dc7ad5569a02c924741697df3d4301a0f45208fd4b9f935a5d58dd83e1db5622a
   languageName: node
   linkType: hard
 
@@ -6880,10 +6880,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tanstack/virtual-core@npm:3.13.23":
-  version: 3.13.23
-  resolution: "@tanstack/virtual-core@npm:3.13.23"
-  checksum: 10c0/3487089ea4e1dcbb01836f51a1b35b709f9ba03312fe600ddb97c893c16be213e1690af735717b1d6b2e22dfec691c338bc96b5965228c195840249699d5273a
+"@tanstack/virtual-core@npm:3.14.0":
+  version: 3.14.0
+  resolution: "@tanstack/virtual-core@npm:3.14.0"
+  checksum: 10c0/9e07e7f74f5e02dfc47b358f7b5089e680d8b14b9c5b90e9497be6f57c76ca98d185fbe5008795b89919346bfc3676ebe1c61b34980eefe6674c88ec6ff4b136
   languageName: node
   linkType: hard
 
@@ -13169,10 +13169,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"i18next-fs-backend@npm:^2.6.3":
-  version: 2.6.3
-  resolution: "i18next-fs-backend@npm:2.6.3"
-  checksum: 10c0/14b84b84818b7e9a4d57df84192072b25e4e325a4c0a2a85bbdefe5b2695842b4f3a0a3e9f3ed0c8bb69fc128e7b8f87bc43d53d3aec813be68f9080326cc88c
+"i18next-fs-backend@npm:^2.6.4":
+  version: 2.6.4
+  resolution: "i18next-fs-backend@npm:2.6.4"
+  checksum: 10c0/b1658cbf5d5acf0f663a2b18ca8e70501ef1b6b14213bd3952eb9a271a36b9dcde4ecd2aa899fbaf2907e584cea7c6fa98e44433f1b7e3e30f67063eb1a26cf6
   languageName: node
   linkType: hard
 
@@ -16922,7 +16922,7 @@ __metadata:
     "@simplewebauthn/browser": "npm:^13.3.0"
     "@simplewebauthn/server": "npm:^13.2.3"
     "@tanstack/react-table": "npm:^8.21.3"
-    "@tanstack/react-virtual": "npm:^3.13.23"
+    "@tanstack/react-virtual": "npm:^3.13.24"
     "@types/addressparser": "npm:^1.0.3"
     "@types/cookie": "npm:0.6.0"
     "@types/crypto-js": "npm:^4.2.2"
@@ -17031,7 +17031,7 @@ __metadata:
     https-proxy-agent: "npm:^7.0.6"
     husky: "npm:^8.0.3"
     i18next: "npm:^22.5.1"
-    i18next-fs-backend: "npm:^2.6.3"
+    i18next-fs-backend: "npm:^2.6.4"
     i18next-http-backend: "npm:^2.7.3"
     i18next-parser: "npm:^8.13.0"
     invariant: "npm:^2.2.4"

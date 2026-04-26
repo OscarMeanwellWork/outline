@@ -141,7 +141,7 @@
     "https-proxy-agent": "^7.0.6",
     "i18next": "^22.5.1",
     "i18next-fs-backend": "^2.6.4",
-    "i18next-http-backend": "^2.7.3",
+    "i18next-http-backend": "^3.0.5",
     "invariant": "^2.2.4",
     "ioredis": "^5.8.2",
     "ipaddr.js": "^2.3.0",
@@ -387,6 +387,7 @@
     "prismjs": "1.30.0",
     "cheerio": "1.0.0-rc.12",
     "zod": "^4.2.1",
+    "socket.io-parser": "4.2.6",
     "@xmldom/xmldom": "0.8.12",
     "fast-xml-parser": "5.5.7",
     "@types/markdown-it": "14.1.1"

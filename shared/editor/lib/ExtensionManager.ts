@@ -8,7 +8,7 @@ import type { Primitive } from "utility-types";
 import type { Editor } from "~/editor";
 import type Mark from "../marks/Mark";
 import type Node from "../nodes/Node";
-import type { CommandFactory } from "./Extension";
+import type { CommandFactory, WidgetProps } from "./Extension";
 import type Extension from "./Extension";
 import makeRules from "./markdown/rules";
 import { MarkdownSerializer } from "./markdown/serializer";
@@ -67,7 +67,8 @@ export default class ExtensionManager {
       .reduce(
         (memo, node: Node) => ({
           ...memo,
-          [node.name]: observer(node.widget as any),
+          [node.name]: observer(((props: WidgetProps) =>
+            node.widget(props)) as React.FC<WidgetProps>),
         }),
         {}
       );
@@ -131,7 +132,8 @@ export default class ExtensionManager {
       .reduce(
         (memo, extension: Node) => ({
           ...memo,
-          [extension.name]: extension.toMarkdown,
+          [extension.name]: (...args: Parameters<Node["toMarkdown"]>) =>
+            extension.toMarkdown(...args),
         }),
         {}
       );
@@ -141,7 +143,8 @@ export default class ExtensionManager {
       .reduce(
         (memo, extension: Mark) => ({
           ...memo,
-          [extension.name]: extension.toMarkdown,
+          [extension.name]: (...args: Parameters<Mark["toMarkdown"]>) =>
+            extension.toMarkdown(...args),
         }),
         {}
       );

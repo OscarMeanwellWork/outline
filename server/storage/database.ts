@@ -214,15 +214,15 @@ export function createMigrationRunner(
         Logger.info(
           "database",
           params.event === "migrating"
-            ? `Migrating ${params.name}…`
-            : `Migrated ${params.name} in ${params.durationSeconds}s`
+            ? `Migrating ${String(params.name)}…`
+            : `Migrated ${String(params.name)} in ${String(params.durationSeconds)}s`
         ),
       debug: (params) =>
         Logger.debug(
           "database",
           params.event === "migrating"
-            ? `Migrating ${params.name}…`
-            : `Migrated ${params.name} in ${params.durationSeconds}s`
+            ? `Migrating ${String(params.name)}…`
+            : `Migrated ${String(params.name)} in ${String(params.durationSeconds)}s`
         ),
     },
   });
@@ -249,18 +249,16 @@ export function monkeyPatchSequelizeErrorsForJest(instance: Sequelize) {
     );
   }
 
-  const origQueryFunc = instance.query;
-  instance.query = async function query(this: Sequelize, ...args: any[]) {
-    let result;
+  const origQueryFunc = instance.query.bind(instance);
+  instance.query = (async (...args: any[]) => {
     try {
-      result = await origQueryFunc.apply(this, args as any);
+      return await origQueryFunc(...(args as Parameters<typeof origQueryFunc>));
     } catch (err: any) {
       // Ensure error appears in Jest output, not swallowed by Sequelize internals
       Logger.error(err.message, err.parent);
       throw err;
     }
-    return result;
-  } as typeof origQueryFunc;
+  }) as typeof instance.query;
 
   return instance;
 }

@@ -36,9 +36,9 @@ export function CounterCache<
     setImmediate(() => {
       const recalculateCache =
         (offset: number) => async (model: InstanceType<T>) => {
-          const cacheKey = `${cacheKeyPrefix}:${
+          const cacheKey = `${cacheKeyPrefix}:${String(
             model[options.foreignKey as keyof typeof model]
-          }`;
+          )}`;
 
           const count = await modelClass.count({
             where: {
@@ -78,6 +78,7 @@ export function CounterCache<
             });
         });
       },
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- TS rejects PropertyDescriptor as legacy decorator return type; descriptor is consumed by Sequelize at runtime.
     } as any;
   };
 }

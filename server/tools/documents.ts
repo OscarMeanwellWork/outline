@@ -7,7 +7,7 @@ import documentUpdater from "@server/commands/documentUpdater";
 import { Op } from "sequelize";
 import { Collection, Document } from "@server/models";
 import { sequelize } from "@server/storage/database";
-import { authorize } from "@server/policies";
+import { authorize, can } from "@server/policies";
 import { presentDocument, presentNavigationNode } from "@server/presenters";
 import AuthenticationHelper from "@shared/helpers/AuthenticationHelper";
 import { UrlHelper } from "@shared/utils/UrlHelper";
@@ -101,6 +101,9 @@ export function documentTools(server: McpServer, scopes: string[]) {
                 exactMatch = await Document.findByPk(query, {
                   userId: user.id,
                 });
+                if (exactMatch && !can(user, "read", exactMatch)) {
+                  exactMatch = null;
+                }
                 if (
                   exactMatch &&
                   collectionId &&
@@ -300,6 +303,12 @@ export function documentTools(server: McpServer, scopes: string[]) {
             .describe(
               "Whether to publish the document. Defaults to true. Set to false to create as a draft."
             ),
+          fullWidth: z
+            .boolean()
+            .optional()
+            .describe(
+              "Whether the document should occupy full width of the screen. Defaults to false."
+            ),
         },
       },
       withTracing("create_document", async (input, context) => {
@@ -340,6 +349,7 @@ export function documentTools(server: McpServer, scopes: string[]) {
             parentDocumentId: parentDocumentId,
             publish: input.publish !== false,
             collectionId: collection?.id,
+            fullWidth: input.fullWidth,
           });
 
           const [{ text, ...attributes }, breadcrumb] = await Promise.all([
@@ -555,6 +565,12 @@ export function documentTools(server: McpServer, scopes: string[]) {
             .optional()
             .describe(
               "Set to true to publish a draft document, or false to convert a published document back to a draft."
+            ),
+          fullWidth: z
+            .boolean()
+            .optional()
+            .describe(
+              "Whether the document should occupy full width of the screen."
             ),
         },
       },

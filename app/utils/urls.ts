@@ -76,6 +76,17 @@ export function redirectTo(url: string) {
 }
 
 /**
+ * Returns the relative path from a URL
+ *
+ * @param urlString The URL as a string
+ * @returns The relative path with query string and hash.
+ */
+export function toRelative(urlString: string) {
+  const url = new URL(urlString);
+  return `${url.pathname}${url.search}${url.hash}`;
+}
+
+/**
  * Check if a URI is a loopback address (localhost, 127.0.0.1, or [::1]).
  *
  * @param uri - the redirect URI to check.

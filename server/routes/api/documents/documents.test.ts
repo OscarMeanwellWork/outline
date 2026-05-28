@@ -2672,6 +2672,50 @@ describe("#documents.move", () => {
     });
     expect(res.status).toEqual(403);
   });
+
+  it("should allow reordering subdocuments with document-only admin access", async () => {
+    const owner = await buildUser();
+    const collection = await buildCollection({
+      teamId: owner.teamId,
+      userId: owner.id,
+      permission: null,
+    });
+    const parent = await buildDocument({
+      teamId: owner.teamId,
+      userId: owner.id,
+      collectionId: collection.id,
+    });
+    const childA = await buildDocument({
+      teamId: owner.teamId,
+      userId: owner.id,
+      collectionId: collection.id,
+      parentDocumentId: parent.id,
+    });
+    const childB = await buildDocument({
+      teamId: owner.teamId,
+      userId: owner.id,
+      collectionId: collection.id,
+      parentDocumentId: parent.id,
+    });
+
+    const user = await buildUser({ teamId: owner.teamId });
+    await UserMembership.create({
+      documentId: parent.id,
+      userId: user.id,
+      createdById: owner.id,
+      permission: DocumentPermission.Admin,
+    });
+
+    const res = await server.post("/api/documents.move", user, {
+      body: {
+        id: childB.id,
+        parentDocumentId: parent.id,
+        index: 0,
+      },
+    });
+    expect(res.status).toEqual(200);
+    expect(childA).toBeTruthy();
+  });
 });
 
 describe("#documents.restore", () => {
@@ -3196,6 +3240,68 @@ describe("#documents.import", () => {
     const body = await res.json();
     expect(res.status).toEqual(200);
     expect(body.data.id).toEqual(document.id);
+
+    vi.restoreAllMocks();
+  });
+
+  it("should import a child document with parent document permission only", async () => {
+    const team = await buildTeam();
+    const author = await buildUser({ teamId: team.id });
+    const user = await buildUser({ teamId: team.id });
+    const collection = await buildCollection({
+      userId: author.id,
+      teamId: team.id,
+      permission: null,
+    });
+    const parentDocument = await buildDocument({
+      userId: author.id,
+      teamId: team.id,
+      collectionId: collection.id,
+    });
+    await UserMembership.create({
+      documentId: parentDocument.id,
+      userId: user.id,
+      createdById: author.id,
+      permission: DocumentPermission.ReadWrite,
+    });
+    const childDocument = await buildDocument({
+      userId: user.id,
+      teamId: team.id,
+      collectionId: collection.id,
+      parentDocumentId: parentDocument.id,
+    });
+
+    vi.spyOn(FileStorage, "store").mockResolvedValue(
+      undefined as unknown as string
+    );
+    vi.spyOn(DocumentImportTask.prototype, "schedule").mockResolvedValue({
+      finished: vi.fn().mockResolvedValue({ documentId: childDocument.id }),
+    } as unknown as Awaited<ReturnType<DocumentImportTask["schedule"]>>);
+
+    const content = await readFile(
+      path.resolve(
+        __dirname,
+        "..",
+        "..",
+        "..",
+        "test",
+        "fixtures",
+        "markdown.md"
+      )
+    );
+    const form = new FormData();
+    form.append("file", content, "markdown.md");
+    form.append("token", user.getSessionToken());
+    form.append("collectionId", collection.id);
+    form.append("parentDocumentId", parentDocument.id);
+
+    const res = await server.post("/api/documents.import", {
+      headers: form.getHeaders(),
+      body: form,
+    });
+    const body = await res.json();
+    expect(res.status).toEqual(200);
+    expect(body.data.id).toEqual(childDocument.id);
 
     vi.restoreAllMocks();
   });

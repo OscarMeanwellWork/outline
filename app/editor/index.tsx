@@ -35,7 +35,10 @@ import type { MarkdownSerializer } from "@shared/editor/lib/markdown/serializer"
 import textBetween from "@shared/editor/lib/textBetween";
 import { basicExtensions as extensions } from "@shared/editor/nodes";
 import type ReactNode from "@shared/editor/nodes/ReactNode";
-import type { ComponentProps } from "@shared/editor/types";
+import type {
+  ComponentProps,
+  SelectionToolbarMenuDescriptor,
+} from "@shared/editor/types";
 import type {
   ProsemirrorData,
   ProsemirrorMark,
@@ -228,6 +231,7 @@ export class Editor extends React.PureComponent<
   nodes: { [name: string]: NodeSpec };
   marks: { [name: string]: MarkSpec };
   commands: Record<string, CommandFactory>;
+  selectionToolbarMenus: SelectionToolbarMenuDescriptor[];
   rulePlugins: PluginSimple[];
   events = new EventEmitter();
   mutationObserver?: MutationObserver;
@@ -341,6 +345,7 @@ export class Editor extends React.PureComponent<
 
     this.view = this.createView();
     this.commands = this.createCommands();
+    this.selectionToolbarMenus = this.extensions.selectionToolbarMenus;
   }
 
   private createExtensions() {
@@ -572,12 +577,18 @@ export class Editor extends React.PureComponent<
       this.mutationObserver = observe(
         hash,
         (element) => {
-          const pos = this.view.posAtDOM(element, 0, 1);
-          this.view.dispatch(
-            this.view.state.tr.setSelection(
-              TextSelection.near(this.view.state.doc.resolve(pos), 1)
-            )
-          );
+          try {
+            const pos = this.view.posAtDOM(element, 0, 1);
+            if (pos >= 0 && pos <= this.view.state.doc.content.size) {
+              this.view.dispatch(
+                this.view.state.tr.setSelection(
+                  TextSelection.near(this.view.state.doc.resolve(pos), 1)
+                )
+              );
+            }
+          } catch (_err) {
+            // posAtDOM may throw if the element is not part of the editor doc
+          }
 
           if (isVisible(element)) {
             element.scrollIntoView();

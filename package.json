@@ -42,7 +42,7 @@
     "url": "https://github.com/sponsors/outline"
   },
   "engines": {
-    "node": ">=20.12 <21 || 22 || 24"
+    "node": ">=20.12 <21 || 22 || 24 <24.17.0 || >24.17.0 <25"
   },
   "repository": {
     "type": "git",
@@ -102,8 +102,8 @@
     "@radix-ui/react-toolbar": "^1.1.12",
     "@radix-ui/react-tooltip": "^1.2.9",
     "@radix-ui/react-visually-hidden": "^1.2.5",
-    "@sentry/node": "^7.120.4",
-    "@sentry/react": "^7.120.4",
+    "@sentry/node": "^10.58.0",
+    "@sentry/react": "^10.58.0",
     "@simplewebauthn/browser": "^13.3.0",
     "@simplewebauthn/server": "^13.3.1",
     "@tanstack/react-table": "^8.21.3",
@@ -126,7 +126,7 @@
     "core-js": "^3.45.1",
     "crypto-js": "^4.2.0",
     "date-fns": "^3.6.0",
-    "dd-trace": "^5.98.0",
+    "dd-trace": "^5.109.0",
     "diff": "^5.2.2",
     "email-providers": "^1.14.0",
     "emoji-mart": "^5.6.0",
@@ -242,7 +242,6 @@
     "semver": "^7.8.1",
     "sequelize": "^6.37.8",
     "sequelize-cli": "^6.6.5",
-    "sequelize-encrypted": "^1.0.0",
     "sequelize-strict-attributes": "^1.0.2",
     "sequelize-typescript": "^2.1.6",
     "slug": "^5.3.0",

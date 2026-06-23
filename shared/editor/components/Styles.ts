@@ -837,6 +837,17 @@ iframe.embed {
   }
 }
 
+.image-icon {
+  display: inline-block;
+  text-align: initial;
+  clear: initial;
+  vertical-align: text-bottom;
+
+  .image-wrapper {
+    margin: 0;
+  }
+}
+
 .image-right-50 {
   float: right;
   margin-left: 2em;
@@ -950,6 +961,11 @@ img.ProseMirror-separator {
 
 .component-image {
   display: block;
+}
+
+.component-image:has(.image-icon) {
+  display: inline-block;
+  vertical-align: text-bottom;
 }
 
 .image-commented .image-wrapper {
@@ -2707,6 +2723,23 @@ li > .${EditorStyleHelper.toggleBlock} {
     > .${EditorStyleHelper.toggleBlockHead} {
       > * {
         margin-top: 0;
+      }
+
+      /* When the title is a heading, match the placeholder text to its size */
+      &.placeholder:has(> :is(h1, h2, h3, h4))::before {
+        font-weight: 600;
+      }
+      &.placeholder:has(> h1)::before {
+        font-size: var(--font-size-h1);
+      }
+      &.placeholder:has(> h2)::before {
+        font-size: var(--font-size-h2);
+      }
+      &.placeholder:has(> h3)::before {
+        font-size: var(--font-size-h3);
+      }
+      &.placeholder:has(> h4)::before {
+        font-size: var(--font-size-h4);
       }
     }
     flex-grow: 1;

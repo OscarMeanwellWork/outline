@@ -267,7 +267,6 @@
     "vaul": "^1.1.2",
     "vite": "^8.0.16",
     "vite-plugin-pwa": "1.3.0",
-    "web-haptics": "^0.0.6",
     "winston": "^3.17.0",
     "ws": "^7.5.11",
     "y-indexeddb": "^9.0.12",
@@ -383,6 +382,6 @@
     "uuid": "^11.1.1",
     "nodemailer@npm:9.0.0": "^9.0.1"
   },
-  "version": "1.9.0",
+  "version": "1.9.1",
   "packageManager": "yarn@4.11.0"
 }

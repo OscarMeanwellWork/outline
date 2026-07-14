@@ -82,8 +82,7 @@ const mathStyle = (props: Props) => css`
 
     .ProseMirror-focused {
       border-radius: 2px;
-      outline: 2px solid
-        ${props.readOnly ? "transparent" : props.theme.selected};
+      outline: none;
     }
   }
 
@@ -771,6 +770,19 @@ iframe.embed {
   .ProseMirror-selectednode img {
     pointer-events: initial;
   }
+}
+
+.image .image-wrapper,
+.image .image-wrapper img {
+  width: var(--image-width, auto);
+}
+
+/* Inside auto-layout table cells the plain pixel width would expand the cell  */
+td .image .image-wrapper,
+th .image .image-wrapper,
+td .image .image-wrapper img,
+th .image .image-wrapper img {
+  width: min(var(--image-width), 100%);
 }
 
 .image.placeholder,
@@ -1773,7 +1785,8 @@ mark {
     `
   }
 
-  &:is(.code-active) + .mermaid-diagram-wrapper {
+  &:is(.code-active)
+    + .mermaid-diagram-wrapper:not(.parse-error):not(.empty) {
     cursor: zoom-in;
   }
 
@@ -1789,7 +1802,7 @@ mark {
     outline: none;
 
     & + .mermaid-diagram-wrapper {
-      &:not(.empty) {
+      &:not(.parse-error):not(.empty) {
         cursor: zoom-in;
       }
       outline: 2px solid ${props.theme.selected};
@@ -1802,7 +1815,7 @@ mark {
     height: 0;
     overflow: hidden;
 
-    & + .mermaid-diagram-wrapper {
+    & + .mermaid-diagram-wrapper:not(.parse-error):not(.empty) {
       cursor: zoom-in;
     }
 }

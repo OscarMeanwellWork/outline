@@ -1217,7 +1217,7 @@ ${
     text-decoration: underline 2px ${props.theme.commentMarkBackground};
     transition: background 100ms ease-in-out;
 
-    &:hover, &.${EditorStyleHelper.commentHovered} {
+    &:hover {
       ${props.readOnly ? "cursor: var(--pointer);" : ""}
       background: ${props.theme.commentMarkBackground};
 
@@ -1226,10 +1226,6 @@ ${
       }
     }
   }
-}
-
-a.${EditorStyleHelper.commentHovered} ~ span.component-image div.image-wrapper {
-  outline: ${props.theme.commentedImageOutlineDark} solid 2px;
 }
 `
     : `
@@ -1243,6 +1239,7 @@ a.${EditorStyleHelper.commentHovered} ~ span.component-image div.image-wrapper {
 .notice-block {
   display: flex;
   align-items: center;
+  position: relative;
   background: ${transparentize(0.9, props.theme.noticeInfoBackground)};
   border-left: 4px solid ${props.theme.noticeInfoBackground};
   color: ${props.theme.noticeInfoText};
@@ -1372,8 +1369,23 @@ p {
   min-height: 1.6em;
 }
 
+/* Make top-level paragraphs a positioning context so the comment gutter anchors
+   to them (flush with the content column) */
+.ProseMirror > p {
+  position: relative;
+}
+
 .heading-content {
   position: relative;
+}
+
+/* The heading is taller than the line, so pin the gutter vertically to center
+   its indicators against the text. Horizontal alignment is handled by the
+   gutter's own rule. */
+.heading-content .${EditorStyleHelper.commentGutter} {
+  top: 0;
+  bottom: 0;
+  justify-content: center;
 }
 
 .heading-content a,
@@ -2634,6 +2646,9 @@ li > .${EditorStyleHelper.toggleBlock} {
 
 .${EditorStyleHelper.toggleBlock} {
   display: flex;
+  /* Establish a positioning context so comment gutters on nested content anchor
+     here (flush with the content column) rather than the padded .ProseMirror. */
+  position: relative;
 
   &:focus-within {
     transition-delay: 0.1s;

@@ -24,6 +24,7 @@ import useBoolean from "~/hooks/useBoolean";
 import useClickIntent from "~/hooks/useClickIntent";
 import useStores from "~/hooks/useStores";
 import { useCallback } from "react";
+import useCurrentUser from "~/hooks/useCurrentUser";
 
 type Props = {
   document: Document | NavigationNode;
@@ -111,11 +112,10 @@ function ReferenceListItem({
   sidebarContext,
   ...rest
 }: Props) {
-  const { t } = useTranslation();
   const { documents } = useStores();
-  const { shareId, isShare } = useShare();
+  const { shareId } = useShare();
+  const user = useCurrentUser({ rejectOnEmpty: false });
   const [menuOpen, handleMenuOpen, handleMenuClose] = useBoolean();
-  const contextMenuAction = useDocumentMenuAction({ documentId: document.id });
   const prefetchDocument = useCallback(async () => {
     await documents.prefetchDocument(document.id);
   }, [documents, document.id]);
@@ -126,6 +126,7 @@ function ReferenceListItem({
   const title =
     document instanceof Document ? document.titleWithDefault : document.title;
   const initial = title.charAt(0).toUpperCase();
+  const showContextMenu = document instanceof Document && !!user;
 
   const link = (
     <DocumentLink
@@ -152,7 +153,7 @@ function ReferenceListItem({
         )}
         <Title>{isEmoji ? title.replace(icon!, "") : title}</Title>
       </Content>
-      {document instanceof Document && (
+      {showContextMenu && (
         <Actions>
           <DocumentMenu
             document={document}
@@ -164,12 +165,42 @@ function ReferenceListItem({
     </DocumentLink>
   );
 
-  if (!(document instanceof Document)) {
+  if (!showContextMenu) {
     return <li>{link}</li>;
   }
 
   return (
     <li>
+      <ReferenceListItemContextMenu
+        document={document}
+        handleMenuOpen={handleMenuOpen}
+        handleMenuClose={handleMenuClose}
+      >
+        {link}
+      </ReferenceListItemContextMenu>
+    </li>
+  );
+}
+
+const ReferenceListItemContextMenu = observer(
+  function ReferenceListItemContextMenu_({
+    document,
+    children,
+    handleMenuOpen,
+    handleMenuClose,
+  }: {
+    document: Document;
+    handleMenuOpen: () => void;
+    handleMenuClose: () => void;
+    children: React.ReactNode;
+  }) {
+    const { t } = useTranslation();
+    const { isShare } = useShare();
+    const contextMenuAction = useDocumentMenuAction({
+      documentId: document.id,
+    });
+
+    return (
       <ActionContextProvider
         value={{
           activeModels: [
@@ -184,11 +215,11 @@ function ReferenceListItem({
           onOpen={handleMenuOpen}
           onClose={handleMenuClose}
         >
-          {link}
+          {children}
         </ContextMenu>
       </ActionContextProvider>
-    </li>
-  );
-}
+    );
+  }
+);
 
 export default observer(ReferenceListItem);

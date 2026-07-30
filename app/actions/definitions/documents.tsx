@@ -52,6 +52,7 @@ import DocumentPermanentDelete from "~/scenes/DocumentPermanentDelete";
 import DocumentPublish from "~/scenes/DocumentPublish";
 import DeleteDocumentsInTrash from "~/scenes/Trash/components/DeleteDocumentsInTrash";
 import ConfirmationDialog from "~/components/ConfirmationDialog";
+import { DialogTitle } from "~/components/DialogTitle";
 import DocumentCopy from "~/components/DocumentExplorer/DocumentCopy";
 import { DocumentDownload } from "~/components/DocumentDownload";
 import MarkdownIcon from "~/components/Icons/MarkdownIcon";
@@ -531,7 +532,7 @@ export const publishDocument = createAction({
       );
     } else if (document) {
       stores.dialogs.openModal({
-        title: t("Publish document"),
+        title: <DialogTitle title={t("Publish document")} model={document} />,
         content: <DocumentPublish document={document} />,
       });
     }
@@ -686,7 +687,7 @@ export const shareDocument = createAction({
     }
 
     stores.dialogs.openModal({
-      title: t("Share this document"),
+      title: <DialogTitle title={t("Share document")} model={document} />,
       content: (
         <SharePopover
           document={document}
@@ -715,7 +716,7 @@ export const downloadDocument = createAction({
     invariant(document, "Document must exist");
 
     stores.dialogs.openModal({
-      title: t("Download document"),
+      title: <DialogTitle title={t("Download document")} model={document} />,
       content: (
         <DocumentDownload
           document={document}
@@ -889,7 +890,8 @@ export const copyDocument = createActionWithChildren({
 });
 
 export const duplicateDocument = createAction({
-  name: ({ t, isMenu }) => (isMenu ? t("Duplicate") : t("Duplicate document")),
+  name: ({ t, isMenu }) =>
+    isMenu ? `${t("Duplicate")}…` : t("Duplicate document"),
   analyticsName: "Duplicate document",
   section: ActiveDocumentSection,
   icon: <DuplicateIcon />,
@@ -905,7 +907,7 @@ export const duplicateDocument = createAction({
     invariant(document, "Document must exist");
 
     stores.dialogs.openModal({
-      title: t("Copy document"),
+      title: <DialogTitle title={t("Duplicate document")} model={document} />,
       content: (
         <DocumentCopy
           document={document}
@@ -1173,7 +1175,7 @@ export const importDocument = createAction({
 });
 
 export const createTemplateFromDocument = createAction({
-  name: ({ t }) => t("Templatize"),
+  name: ({ t }) => `${t("Templatize")}…`,
   analyticsName: "Templatize document",
   section: ActiveDocumentSection,
   icon: <ShapesIcon />,
@@ -1194,10 +1196,14 @@ export const createTemplateFromDocument = createAction({
     if (!activeDocumentId) {
       return;
     }
+    const document = stores.documents.get(activeDocumentId);
+    if (!document) {
+      return;
+    }
     event?.preventDefault();
     event?.stopPropagation();
     stores.dialogs.openModal({
-      title: t("Create template"),
+      title: <DialogTitle title={t("Create template")} model={document} />,
       content: <DocumentTemplatizeDialog documentId={activeDocumentId} />,
     });
   },
@@ -1255,9 +1261,14 @@ export const moveDocumentToCollection = createAction({
       }
 
       stores.dialogs.openModal({
-        title: t("Move {{ documentType }}", {
-          documentType: document.noun,
-        }),
+        title: (
+          <DialogTitle
+            title={t("Move {{ documentType }}", {
+              documentType: document.noun,
+            })}
+            model={document}
+          />
+        ),
         content: <DocumentMove document={document} />,
       });
     }
@@ -1303,7 +1314,12 @@ export const archiveDocument = createAction({
       }
 
       dialogs.openModal({
-        title: t("Are you sure you want to archive this document?"),
+        title: (
+          <DialogTitle
+            title={t("Are you sure you want to archive this document?")}
+            model={document}
+          />
+        ),
         content: (
           <ConfirmationDialog
             onSubmit={async () => {
@@ -1431,9 +1447,14 @@ export const deleteDocument = createAction({
       }
 
       stores.dialogs.openModal({
-        title: t("Delete {{ documentName }}", {
-          documentName: document.noun,
-        }),
+        title: (
+          <DialogTitle
+            title={t("Delete {{ documentName }}", {
+              documentName: document.noun,
+            })}
+            model={document}
+          />
+        ),
         content: (
           <DocumentDelete
             document={document}
@@ -1465,9 +1486,14 @@ export const permanentlyDeleteDocument = createAction({
       }
 
       stores.dialogs.openModal({
-        title: t("Permanently delete {{ documentName }}", {
-          documentName: document.noun,
-        }),
+        title: (
+          <DialogTitle
+            title={t("Permanently delete {{ documentName }}", {
+              documentName: document.noun,
+            })}
+            model={document}
+          />
+        ),
         content: (
           <DocumentPermanentDelete
             document={document}
@@ -1581,7 +1607,7 @@ export const openDocumentInsights = createAction({
     }
 
     stores.dialogs.openModal({
-      title: t("Insights"),
+      title: <DialogTitle title={t("Insights")} model={document} />,
       content: <Insights document={document} />,
     });
   },

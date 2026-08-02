@@ -1,4 +1,9 @@
+import path from "node:path";
+import fs from "fs-extra";
 import { DocumentConverter } from "./DocumentConverter";
+
+const fixture = (fileName: string) =>
+  fs.readFile(path.resolve(__dirname, "..", "test", "fixtures", fileName));
 
 describe("DocumentConverter", () => {
   describe("convert", () => {
@@ -94,6 +99,55 @@ Jane,24,`;
         // Jane's row should have 3 columns (empty city preserved)
         expect(result.text).toMatch(/\| Jane \| 24\s*\|\s*\|/);
       });
+
+      it("should convert csv when the mime type is not recognized", async () => {
+        const csv = `name,age
+John,25`;
+
+        const result = await DocumentConverter.convert(
+          csv,
+          "test.csv",
+          "application/vnd.ms-excel"
+        );
+
+        expect(result.text).toContain("| name | age |");
+        expect(result.text).toContain("John");
+      });
+    });
+
+    describe("tsv", () => {
+      it("should convert tsv to markdown table", async () => {
+        const tsv = "name\tage\nJohn\t25\nJane\t24";
+
+        const result = await DocumentConverter.convert(
+          tsv,
+          "test.tsv",
+          "text/tab-separated-values"
+        );
+
+        expect(result.text).toContain("| name | age |");
+        expect(result.text).toContain("John");
+        expect(result.text).toContain("Jane");
+      });
+
+      it("should convert tsv when the mime type is not recognized", async () => {
+        const tsv = "name\tage\nJohn\t25";
+
+        const result = await DocumentConverter.convert(tsv, "test.tsv", "");
+
+        expect(result.text).toContain("| name | age |");
+        expect(result.text).toContain("John");
+      });
+    });
+
+    describe("txt", () => {
+      it("should convert txt when the mime type is not recognized", async () => {
+        const txt = "Plain text content";
+
+        const result = await DocumentConverter.convert(txt, "test.txt", "");
+
+        expect(result.text).toContain("Plain text content");
+      });
     });
 
     describe("html", () => {
@@ -120,6 +174,118 @@ Jane,24,`;
 
         expect(result.icon).toEqual("🚀");
         expect(result.text).not.toMatch(/^🚀/);
+      });
+
+      it("should convert htm when the mime type is not recognized", async () => {
+        const html = "<h1>My Title</h1><p>Content here</p>";
+        const result = await DocumentConverter.convert(html, "test.HTM", "");
+
+        expect(result.title).toEqual("My Title");
+        expect(result.text).toContain("Content here");
+      });
+    });
+
+    describe("mhtml", () => {
+      it("should convert a Chrome-saved MHTML page with an inline image", async () => {
+        const content = await fixture("webpage.mhtml");
+        const result = await DocumentConverter.convert(
+          content,
+          "webpage.mhtml",
+          "multipart/related"
+        );
+
+        expect(result.title).toEqual("Heading 1");
+        expect(result.text).toContain("Text paragraph with a logo below");
+        // The tracking script and stylesheet should not leak into the content
+        expect(result.text).not.toContain("tracking pixel");
+        expect(result.text).not.toContain("font-family");
+        // The image referenced by Content-Location should be inlined as a data URI
+        expect(result.text).toMatch(/!\[.*?\]\(data:image\/png;base64,/);
+      });
+
+      it("should fall back to the .mhtml extension when the mime type is unrecognized", async () => {
+        const content = await fixture("webpage.mhtml");
+        const result = await DocumentConverter.convert(
+          content,
+          "webpage.mhtml",
+          "application/octet-stream"
+        );
+
+        expect(result.title).toEqual("Heading 1");
+        expect(result.text).toContain("Text paragraph with a logo below");
+      });
+
+      it("should throw a clean error for a malformed archive", async () => {
+        const content = "This is not a MIME archive, just plain garbage.";
+
+        await expect(
+          DocumentConverter.convert(content, "broken.mhtml", "")
+        ).rejects.toThrow("Unsupported MHTML file (No content found)");
+      });
+    });
+
+    describe("eml", () => {
+      it("should convert an .eml with a cid: referenced inline image", async () => {
+        const content = await fixture("email-with-image.eml");
+        const result = await DocumentConverter.convert(
+          content,
+          "email-with-image.eml",
+          "message/rfc822"
+        );
+
+        // The Subject header becomes the document title
+        expect(result.title).toEqual("Meeting notes");
+        expect(result.text).toContain("Text paragraph with our logo");
+        // The image referenced by cid: should be inlined as a data URI
+        expect(result.text).toMatch(/!\[.*?\]\(data:image\/png;base64,/);
+      });
+
+      it("should discard a malformed content type when inlining a part", async () => {
+        const content = [
+          "From: alice@example.com",
+          "Subject: Malformed content type",
+          "MIME-Version: 1.0",
+          'Content-Type: multipart/related; boundary="B"',
+          "",
+          "--B",
+          "Content-Type: text/html",
+          "",
+          '<html><body><p>hi</p><img src="cid:x@example.com"></body></html>',
+          "--B",
+          'Content-Type: image/png"><script>alert(1)</script><img src="x',
+          "Content-Transfer-Encoding: base64",
+          "Content-ID: <x@example.com>",
+          "",
+          "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII=",
+          "",
+          "--B--",
+          "",
+        ].join("\r\n");
+
+        const result = await DocumentConverter.convert(
+          content,
+          "malformed.eml",
+          "message/rfc822"
+        );
+
+        expect(result.text).not.toContain("alert(1)");
+        expect(result.text).toMatch(
+          /!\[.*?\]\(data:application\/octet-stream;base64,/
+        );
+      });
+
+      it("should fall back to plain text when there is no HTML part", async () => {
+        const content = await fixture("email-plain-text.eml");
+        const result = await DocumentConverter.convert(
+          content,
+          "email-plain-text.eml",
+          "message/rfc822"
+        );
+
+        expect(result.title).toEqual("Plain text note");
+        expect(result.text).toContain(
+          "This is a plain text email with no HTML part"
+        );
       });
     });
 

@@ -771,6 +771,27 @@ export const downloadDocumentAsHTML = createAction({
   },
 });
 
+export const downloadDocumentAsTextBundle = createAction({
+  name: ({ t }) => t("Download as TextBundle"),
+  analyticsName: "Download document as TextBundle",
+  section: ActiveDocumentSection,
+  keywords: "textbundle textpack bear ulysses export",
+  icon: <DownloadIcon />,
+  visible: ({ activeDocumentId, stores }) =>
+    !!activeDocumentId && stores.policies.abilities(activeDocumentId).download,
+  perform: async ({ activeDocumentId, stores }) => {
+    if (!activeDocumentId) {
+      return;
+    }
+
+    const document = stores.documents.get(activeDocumentId);
+    await document?.download({
+      contentType: ExportContentType.TextBundle,
+      includeChildDocuments: false,
+    });
+  },
+});
+
 export const downloadDocumentAsPDF = createAction({
   name: ({ t }) => t("Download as PDF"),
   analyticsName: "Download document as PDF",
@@ -1219,6 +1240,8 @@ export const createTemplateFromDocument = createAction({
     );
   },
   perform: ({ activeDocumentId, stores, t, event }) => {
+    event?.preventDefault();
+    event?.stopPropagation();
     if (!activeDocumentId) {
       return;
     }
@@ -1226,8 +1249,6 @@ export const createTemplateFromDocument = createAction({
     if (!document) {
       return;
     }
-    event?.preventDefault();
-    event?.stopPropagation();
     stores.dialogs.openModal({
       title: <DialogTitle title={t("Create template")} model={document} />,
       content: <DocumentTemplatizeDialog documentId={activeDocumentId} />,
@@ -1354,11 +1375,13 @@ export const archiveDocument = createAction({
             const succeeded = await performBatch(documents, (document) =>
               document.archive()
             );
-            toast.success(
-              documents.length === 1
-                ? t("Document archived")
-                : t("{{ count }} documents archived", { count: succeeded })
-            );
+            if (succeeded) {
+              toast.success(
+                documents.length === 1
+                  ? t("Document archived")
+                  : t("{{ count }} documents archived", { count: succeeded })
+              );
+            }
           }}
           savingText={`${t("Archiving")}…`}
         >
@@ -1506,9 +1529,11 @@ export const deleteDocument = createAction({
             const succeeded = await performBatch(documents, (document) =>
               document.delete()
             );
-            toast.success(
-              t("{{ count }} documents moved to trash", { count: succeeded })
-            );
+            if (succeeded) {
+              toast.success(
+                t("{{ count }} documents moved to trash", { count: succeeded })
+              );
+            }
           }}
         >
           {t("Deleting these documents will move them to the trash.")}
@@ -1736,6 +1761,7 @@ export const rootDocumentActions = [
   downloadDocument,
   downloadDocumentAsMarkdown,
   downloadDocumentAsHTML,
+  downloadDocumentAsTextBundle,
   downloadDocumentAsPDF,
   copyDocumentLink,
   copyDocumentShareLink,

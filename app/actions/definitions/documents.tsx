@@ -53,7 +53,7 @@ import DeleteDocumentsInTrash from "~/scenes/Trash/components/DeleteDocumentsInT
 import ConfirmationDialog from "~/components/ConfirmationDialog";
 import { DialogTitle } from "~/components/DialogTitle";
 import DocumentCopy from "~/components/DocumentExplorer/DocumentCopy";
-import { DocumentDownload } from "~/components/DocumentDownload";
+import { DocumentDownload } from "~/components/Export/DocumentDownload";
 import MarkdownIcon from "~/components/Icons/MarkdownIcon";
 import { ImportDocumentDialog } from "~/components/ImportDocumentDialog";
 import { getHeaderExpandedKey } from "~/components/Sidebar/components/Header";
@@ -1583,11 +1583,10 @@ export const permanentlyDeleteDocument = createAction({
 });
 
 export const permanentlyDeleteDocumentsInTrash = createAction({
-  name: ({ t }) => t("Empty trash"),
+  name: ({ t }) => `${t("Empty trash")}…`,
   analyticsName: "Empty trash",
   section: TrashSection,
   icon: <TrashIcon />,
-  dangerous: true,
   visible: ({ stores }) =>
     stores.documents.deleted.length > 0 && !!stores.auth.user?.isAdmin,
   perform: ({ stores, t, location }) => {

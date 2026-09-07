@@ -8,7 +8,7 @@ import type {
   Node as ProsemirrorNode,
   Schema,
 } from "prosemirror-model";
-import type { Command, Transaction } from "prosemirror-state";
+import type { Command, EditorState, Transaction } from "prosemirror-state";
 import { Plugin, PluginKey, TextSelection } from "prosemirror-state";
 import { findWrapping } from "prosemirror-transform";
 import { Decoration, DecorationSet } from "prosemirror-view";
@@ -50,6 +50,14 @@ export enum Action {
   INIT,
   FOLD,
   UNFOLD,
+}
+
+interface FoldAction {
+  type: Action;
+  /** Position of the target block; omitted to target every toggle block. */
+  at?: number;
+  /** Whether toggle blocks nested inside the target are included. */
+  nested?: boolean;
 }
 
 interface ToggleFoldState {
@@ -168,16 +176,13 @@ export default class ToggleBlock extends Node {
 
       state: {
         init: (_config, state) => {
-          const { foldedIds, knownIds, blocks } =
-            this.collectFoldState(state.doc);
+          const { foldedIds, knownIds, blocks } = this.collectFoldState(
+            state.doc
+          );
           return {
             foldedIds,
             knownIds,
-            decorations: this.createDecorations(
-              state.doc,
-              foldedIds,
-              blocks
-            ),
+            decorations: this.createDecorations(state.doc, foldedIds, blocks),
           };
         },
 
@@ -203,26 +208,15 @@ export default class ToggleBlock extends Node {
           const newFoldedIds = new Set(pluginState.foldedIds);
           const newKnownIds = new Set(pluginState.knownIds);
 
-          switch (action.type) {
-            case Action.FOLD: {
-              const node = newState.doc.nodeAt(action.at);
-              if (node?.attrs.id) {
-                newFoldedIds.add(node.attrs.id);
-                newKnownIds.add(node.attrs.id);
-                foldStateCache.set(node.attrs.id, { fold: true });
-              }
-              break;
+          const fold = action.type === Action.FOLD;
+          for (const { node } of this.resolveTargets(newState.doc, action)) {
+            if (fold) {
+              newFoldedIds.add(node.attrs.id);
+            } else {
+              newFoldedIds.delete(node.attrs.id);
             }
-
-            case Action.UNFOLD: {
-              const node = newState.doc.nodeAt(action.at);
-              if (node?.attrs.id) {
-                newFoldedIds.delete(node.attrs.id);
-                newKnownIds.add(node.attrs.id);
-                foldStateCache.set(node.attrs.id, { fold: false });
-              }
-              break;
-            }
+            newKnownIds.add(node.attrs.id);
+            foldStateCache.set(node.attrs.id, { fold });
           }
 
           return {
@@ -268,31 +262,12 @@ export default class ToggleBlock extends Node {
 
         if (eventTr) {
           const event = eventTr.getMeta(toggleEventPluginKey);
-          const node = newState.doc.nodeAt(event.at);
+          const targets = this.resolveTargets(newState.doc, event);
 
-          if (node) {
-            if (event.type === Action.FOLD) {
-              // Move cursor out of body if folding
-              const { $anchor } = newState.selection;
-              const startOfNode = event.at + 1;
-              const endOfFirstChild = startOfNode + node.firstChild!.nodeSize;
-              const endOfNode = startOfNode + node.nodeSize - 1;
-
-              if ($anchor.pos > endOfFirstChild && $anchor.pos < endOfNode) {
-                const $endOfFirstChild = newState.doc.resolve(endOfFirstChild);
-                tr = newState.tr.setSelection(
-                  TextSelection.near($endOfFirstChild, -1)
-                );
-              }
-            } else if (event.type === Action.UNFOLD) {
-              // Insert empty paragraph if body is empty (for placeholder visibility)
-              if (node.childCount === 1) {
-                tr = newState.tr.insert(
-                  event.at + 1 + node.content.size,
-                  newState.schema.nodes.paragraph.create({})
-                );
-              }
-            }
+          if (event.type === Action.FOLD) {
+            tr = this.moveSelectionOutOfBody(newState, targets);
+          } else if (event.type === Action.UNFOLD) {
+            tr = this.insertParagraphIntoEmptyBodies(newState, targets);
           }
         }
 
@@ -496,6 +471,103 @@ export default class ToggleBlock extends Node {
   }
 
   /**
+   * Resolve the toggle blocks an action applies to: the block at the given
+   * position, that block and every toggle block nested inside it when
+   * `nested` is set, or every toggle block in the document when no position
+   * is given.
+   *
+   * @param doc The document to look in.
+   * @param action The fold action describing the target position and scope.
+   * @return The matching toggle blocks with their positions, in document order.
+   */
+  private resolveTargets(
+    doc: ProsemirrorNode,
+    action: FoldAction
+  ): NodeWithPos[] {
+    const isToggle = (b: {
+      node: ProsemirrorNode | null;
+      pos: number;
+    }): b is NodeWithPos =>
+      b.node !== null && b.node.type.name === this.name && !!b.node.attrs.id;
+
+    if (action.at === undefined) {
+      return findBlockNodes(doc, true).filter(isToggle);
+    }
+
+    const at = action.at;
+    const root = { node: doc.nodeAt(at), pos: at };
+    if (!isToggle(root)) {
+      return [];
+    }
+
+    if (!action.nested) {
+      return [root];
+    }
+
+    const descendants = findBlockNodes(root.node, true)
+      .map((b) => ({ node: b.node, pos: at + 1 + b.pos }))
+      .filter(isToggle);
+    return [root, ...descendants];
+  }
+
+  /**
+   * Move the selection to the end of the title of the outermost target whose
+   * body contains it, so that folding does not hide the cursor.
+   *
+   * @param state The editor state after the fold.
+   * @param targets The toggle blocks being folded, in document order.
+   * @return A transaction moving the selection, or null if none is needed.
+   */
+  private moveSelectionOutOfBody(
+    state: EditorState,
+    targets: NodeWithPos[]
+  ): Transaction | null {
+    const { $anchor } = state.selection;
+
+    for (const { node, pos } of targets) {
+      const startOfNode = pos + 1;
+      const endOfFirstChild = startOfNode + node.firstChild!.nodeSize;
+      const endOfNode = startOfNode + node.nodeSize - 1;
+
+      if ($anchor.pos > endOfFirstChild && $anchor.pos < endOfNode) {
+        return state.tr.setSelection(
+          TextSelection.near(state.doc.resolve(endOfFirstChild), -1)
+        );
+      }
+    }
+
+    return null;
+  }
+
+  /**
+   * Insert an empty paragraph into every target with an empty body so that
+   * the placeholder is visible after unfolding.
+   *
+   * @param state The editor state after the unfold.
+   * @param targets The toggle blocks being unfolded, in document order.
+   * @return A transaction inserting paragraphs, or null if none is needed.
+   */
+  private insertParagraphIntoEmptyBodies(
+    state: EditorState,
+    targets: NodeWithPos[]
+  ): Transaction | null {
+    const emptyBlocks = targets.filter((b) => b.node.childCount === 1);
+    if (emptyBlocks.length === 0) {
+      return null;
+    }
+
+    const tr = state.tr;
+    // Insert from the end so earlier positions stay valid.
+    for (const { node, pos } of emptyBlocks.reverse()) {
+      tr.insert(
+        pos + 1 + node.content.size,
+        state.schema.nodes.paragraph.create({})
+      );
+    }
+    return tr;
+  }
+
+  /**
    * Collect initial fold state for every toggle block in the document.
    *
    * Used on plugin initialization, where every block is treated as new: the
@@ -605,7 +677,11 @@ export default class ToggleBlock extends Node {
     return {
       foldedIds,
       knownIds,
-      decorations: this.buildDecorationsFromBlocks(doc, toggleBlocks, foldedIds),
+      decorations: this.buildDecorationsFromBlocks(
+        doc,
+        toggleBlocks,
+        foldedIds
+      ),
     };
   }
 

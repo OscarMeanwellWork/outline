@@ -7119,15 +7119,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/nodemailer@npm:^6.4.23":
-  version: 6.4.24
-  resolution: "@types/nodemailer@npm:6.4.24"
-  dependencies:
-    "@types/node": "npm:*"
-  checksum: 10c0/7e500ee7f34b3e7ea88e7363a1dc9d93ca70d762db42e729604805e9ce576d25bd2f3c92342506625e09a3a9fd9788502457356e94d054c17c553ab3575091db
-  languageName: node
-  linkType: hard
-
 "@types/oauth@npm:*":
   version: 0.9.6
   resolution: "@types/oauth@npm:0.9.6"
@@ -7566,25 +7557,25 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@vitest/expect@npm:4.1.10":
-  version: 4.1.10
-  resolution: "@vitest/expect@npm:4.1.10"
+"@vitest/expect@npm:4.1.11":
+  version: 4.1.11
+  resolution: "@vitest/expect@npm:4.1.11"
   dependencies:
     "@standard-schema/spec": "npm:^1.1.0"
     "@types/chai": "npm:^5.2.2"
-    "@vitest/spy": "npm:4.1.10"
-    "@vitest/utils": "npm:4.1.10"
+    "@vitest/spy": "npm:4.1.11"
+    "@vitest/utils": "npm:4.1.11"
     chai: "npm:^6.2.2"
     tinyrainbow: "npm:^3.1.0"
-  checksum: 10c0/a817ad0d9bd6a039776a7228d54fb8319c17e4af15917407f5566ac61781a8511f591d302519d6999217399915bc3c0290028189fc73f5c38f80cb01b6f19c8d
+  checksum: 10c0/0aa5e0973aca93a58cbdc3041c6bfed5897e976124965203b96a23b811f4ca403590c7eb15802c8d8366ec27a1db0682451e8a91c4d06617636de262baf86e4b
   languageName: node
   linkType: hard
 
-"@vitest/mocker@npm:4.1.10":
-  version: 4.1.10
-  resolution: "@vitest/mocker@npm:4.1.10"
+"@vitest/mocker@npm:4.1.11":
+  version: 4.1.11
+  resolution: "@vitest/mocker@npm:4.1.11"
   dependencies:
-    "@vitest/spy": "npm:4.1.10"
+    "@vitest/spy": "npm:4.1.11"
     estree-walker: "npm:^3.0.3"
     magic-string: "npm:^0.30.21"
   peerDependencies:
@@ -7595,16 +7586,7 @@ __metadata:
       optional: true
     vite:
       optional: true
-  checksum: 10c0/4aa70b0df58681652e2e28093437fb2e8f4d02a6d03f5619abc266ac1c5ae5f43326148061d13ae6e071e0f6cfcf7634659af63644de8ce098a7c98949a3d1ad
-  languageName: node
-  linkType: hard
-
-"@vitest/pretty-format@npm:4.1.10":
-  version: 4.1.10
-  resolution: "@vitest/pretty-format@npm:4.1.10"
-  dependencies:
-    tinyrainbow: "npm:^3.1.0"
-  checksum: 10c0/1a5daba730ffe23f2000bff484b4b2842f3b178d93663cb487b215516b8d3b62caa3e2bb2a3c63307b61a9fe58fb9bfff38559bc0c5e49d8aa403d6803a1d918
+  checksum: 10c0/3111ea34bd5046f6c70bbd67cf8b89608ee8c41cb27ab2bd61d42f4b68810e9ea16a9a757a71bc254c105f73b407d00ebb6bab1ab0f7f5cdcc9d7d16602a3933
   languageName: node
   linkType: hard
 
@@ -7617,32 +7599,32 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@vitest/runner@npm:4.1.10":
-  version: 4.1.10
-  resolution: "@vitest/runner@npm:4.1.10"
+"@vitest/runner@npm:4.1.11":
+  version: 4.1.11
+  resolution: "@vitest/runner@npm:4.1.11"
   dependencies:
-    "@vitest/utils": "npm:4.1.10"
+    "@vitest/utils": "npm:4.1.11"
     pathe: "npm:^2.0.3"
-  checksum: 10c0/554b72639de9694271b99be8ae273fe12ec793093ec91cce143816cd1187d40b7138a4d9d4de4f456cfca9567de986825bff97e107c05b9eb4abc130e854286d
+  checksum: 10c0/3c782b055e9e688e1785f7c8937bd1669bad1b0e5758cb8b844f918f30a324b1d21e174d46c941ce80ebf37f2b89b55b6d619a675025914a1ece6377b95909e2
   languageName: node
   linkType: hard
 
-"@vitest/snapshot@npm:4.1.10":
-  version: 4.1.10
-  resolution: "@vitest/snapshot@npm:4.1.10"
+"@vitest/snapshot@npm:4.1.11":
+  version: 4.1.11
+  resolution: "@vitest/snapshot@npm:4.1.11"
   dependencies:
-    "@vitest/pretty-format": "npm:4.1.10"
-    "@vitest/utils": "npm:4.1.10"
+    "@vitest/pretty-format": "npm:4.1.11"
+    "@vitest/utils": "npm:4.1.11"
     magic-string: "npm:^0.30.21"
     pathe: "npm:^2.0.3"
-  checksum: 10c0/e71398725f51af5fd0c07bb4b957d0f987daf9b4c564ac24cb2a4d1afde1a6939f535ac17761a32dcc41b0a1e6d4088af66dc44df89fdebebb92aabed1a92b5f
+  checksum: 10c0/35d82a7c2a3e4b57529c30387d568d9106b6bf960189214e5d8cb1f5288cb042305c2e5c7b0b2f8cb56a2c814973de0310bc56d72deb79427bea272b6224190c
   languageName: node
   linkType: hard
 
-"@vitest/spy@npm:4.1.10":
-  version: 4.1.10
-  resolution: "@vitest/spy@npm:4.1.10"
-  checksum: 10c0/e5c08012560af6727fd66741c5cda25560d7c5442103d0c83e4276a9b0dd90b9da6cdf823a461195229a16c6ff87768ce788a68d0fa29dea73ee285618668178
+"@vitest/spy@npm:4.1.11":
+  version: 4.1.11
+  resolution: "@vitest/spy@npm:4.1.11"
+  checksum: 10c0/06c68247a8efd21006abe7532fee17f30ba83c8cda3e0b952ef89e278d58058f4b1de69b6bbaa2ed614c568bf4f5769fcc76be42802dedf2bcdd9c0aae601740
   languageName: node
   linkType: hard
 
@@ -7660,17 +7642,6 @@ __metadata:
   peerDependencies:
     vitest: 4.1.11
   checksum: 10c0/8e6099bab10c1f713f83cbdf1543147824a4312478c96967da8dcb72b5f2a9133574543dd7f3659259046ccdbaec727cc097003e47046c81ef5a2c6c02c5b7c1
-  languageName: node
-  linkType: hard
-
-"@vitest/utils@npm:4.1.10":
-  version: 4.1.10
-  resolution: "@vitest/utils@npm:4.1.10"
-  dependencies:
-    "@vitest/pretty-format": "npm:4.1.10"
-    convert-source-map: "npm:^2.0.0"
-    tinyrainbow: "npm:^3.1.0"
-  checksum: 10c0/05b0ecec6997ec22fc08377e57dbd8fa37992e05961f3a7a916d98b1ab56d15c2a87dbd83d392b628242bdc156b1705e7fa60a3bf0c54bdb51158c153e05fc5d
   languageName: node
   linkType: hard
 
@@ -7814,14 +7785,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@zone-eu/mailsplit@npm:5.4.15":
-  version: 5.4.15
-  resolution: "@zone-eu/mailsplit@npm:5.4.15"
+"@zone-eu/mailsplit@npm:5.4.16":
+  version: 5.4.16
+  resolution: "@zone-eu/mailsplit@npm:5.4.16"
   dependencies:
     libbase64: "npm:1.3.0"
-    libmime: "npm:5.4.2"
+    libmime: "npm:5.4.3"
     libqp: "npm:2.1.1"
-  checksum: 10c0/de5e82d8a7994cb01b2aef160ad2bf6eaad4508e1fef2cb7836a18acb448ca764dcb51fdd865ba7be15f57d7f39470f554270a529983a9cb59cd418175127ab9
+  checksum: 10c0/cce6b192897b819986a07b3b82a974ad8b4694261ba88cd5119444cb6e86686df7de1a3b89b35d6610051b19297b203f7e70d6e6ea1e46264fb6c111d9458e5c
   languageName: node
   linkType: hard
 
@@ -10556,10 +10527,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"encoding-japanese@npm:2.2.0":
-  version: 2.2.0
-  resolution: "encoding-japanese@npm:2.2.0"
-  checksum: 10c0/9d1f10dde16f59da8a8a1a04499dffa3e9926b0dbd7dfab8054570527b7e6de30c47e828851f42d2727af31586ec8049a84eeae593ad8b22eea10921fd269798
+"encoding-japanese@npm:2.3.0":
+  version: 2.3.0
+  resolution: "encoding-japanese@npm:2.3.0"
+  checksum: 10c0/5c58dfbbb9bd5fa74bbd3cafb0a210848f5044320a4e50b43bd023d5e6b4aaac78a61ea7064ae4a0cffe6162d84f746f4643c2f42c9dac08e1391cd74d2b6745
   languageName: node
   linkType: hard
 
@@ -12261,9 +12232,9 @@ __metadata:
   linkType: hard
 
 "hono@npm:^4.11.4":
-  version: 4.13.0
-  resolution: "hono@npm:4.13.0"
-  checksum: 10c0/d7cfb4d1063be19bea1982ea2a6b3cfa1840e8403a03203e86d17278e76fed11e7483974738345257543e183a935ea73ffc6d4a1e6ad7f0008451f55cdf8be7b
+  version: 4.13.7
+  resolution: "hono@npm:4.13.7"
+  checksum: 10c0/29672a94a4f2be7f3f4d959ad69808dd3bbc220909ca4f9660997022ff45d48ae71e42a460e417d808809d68110196f19359aaab2b14ae6a750331d789601b5a
   languageName: node
   linkType: hard
 
@@ -12297,16 +12268,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"html-to-text@npm:10.0.0":
-  version: 10.0.0
-  resolution: "html-to-text@npm:10.0.0"
+"html-to-text@npm:10.0.1":
+  version: 10.0.1
+  resolution: "html-to-text@npm:10.0.1"
   dependencies:
     "@selderee/plugin-htmlparser2": "npm:~0.12.0"
-    deepmerge-ts: "npm:^7.1.5"
+    deepmerge-ts: "npm:^8.0.1"
     dom-serializer: "npm:^2.0.0"
     htmlparser2: "npm:^10.1.0"
     selderee: "npm:~0.12.0"
-  checksum: 10c0/fde3b3695ff1bf8ba71b5fb388734de941cf8ccd4c0e816add07104496e21b8f9f937058b35c69554e510af72a5fb582e8966daa165a350464faf97d0aa9e066
+  checksum: 10c0/e43826e0bed6baa7e168b342ccaca1376ad5fd7ae487c8fee8dd8c5a770269cd7270b40ed847e940e2487bf90a3e67036a52b7f8f8225090cd21fc86f610e830
   languageName: node
   linkType: hard
 
@@ -13405,14 +13376,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"js-yaml@npm:^4.1.0, js-yaml@npm:^4.3.1":
-  version: 4.3.1
-  resolution: "js-yaml@npm:4.3.1"
+"js-yaml@npm:^4.1.0, js-yaml@npm:^4.3.1, js-yaml@npm:^4.3.2":
+  version: 4.3.2
+  resolution: "js-yaml@npm:4.3.2"
   dependencies:
     argparse: "npm:^2.0.1"
   bin:
     js-yaml: bin/js-yaml.js
-  checksum: 10c0/13c500ca322e0c3f8c81686e6ecda96d2ea37b45247a420c17c7db36932d6965cc27391abc2d1a104501600e7f0d947a5f8b7be6db619c4fefa87901b3512807
+  checksum: 10c0/dedd34c2e8fef1d504687f1bc94ed0ee1311a1f78770fa2800352c6d59c635ccf555009d74e9afe529ae62199da2b1ccef30e53dc84dcd8d2d8187c22574bc97
   languageName: node
   linkType: hard
 
@@ -13926,15 +13897,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"libmime@npm:5.4.2":
-  version: 5.4.2
-  resolution: "libmime@npm:5.4.2"
+"libmime@npm:5.4.3":
+  version: 5.4.3
+  resolution: "libmime@npm:5.4.3"
   dependencies:
-    encoding-japanese: "npm:2.2.0"
+    encoding-japanese: "npm:2.3.0"
     iconv-lite: "npm:0.7.3"
     libbase64: "npm:1.3.0"
     libqp: "npm:2.1.1"
-  checksum: 10c0/207d6f148be620243d1670db8a746d33686d79e8863a692b35f9351f221cce0b25ff8b18d95d054f8e7743a165d84ac3fec5998e0410c1e6a8ed003ce788b484
+  checksum: 10c0/e94e77b6404de0c57156217507db488eb48acab276777b8ebdd1badeb9a88ba749590dab412cc36acb6927bdf1757523bf70d1283f02295b5ab81abd76dfea9d
   languageName: node
   linkType: hard
 
@@ -14395,21 +14366,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"mailparser@npm:^3.9.15":
-  version: 3.9.15
-  resolution: "mailparser@npm:3.9.15"
+"mailparser@npm:^3.9.20":
+  version: 3.9.22
+  resolution: "mailparser@npm:3.9.22"
   dependencies:
-    "@zone-eu/mailsplit": "npm:5.4.15"
-    encoding-japanese: "npm:2.2.0"
+    "@zone-eu/mailsplit": "npm:5.4.16"
+    encoding-japanese: "npm:2.3.0"
     he: "npm:1.2.0"
-    html-to-text: "npm:10.0.0"
+    html-to-text: "npm:10.0.1"
     iconv-lite: "npm:0.7.3"
-    libmime: "npm:5.4.2"
+    libmime: "npm:5.4.3"
     linkify-it: "npm:5.0.2"
-    nodemailer: "npm:9.0.5"
+    nodemailer: "npm:10.0.0"
     punycode.js: "npm:2.3.1"
     tlds: "npm:1.261.0"
-  checksum: 10c0/073681539404815d1fb3bd1b018fb7069f51f0e4cf1e0de1a0807ba4580429fb64e4b7e6413414f17942ed12330a51c31053b787c21fc9a2ff5c3b6225604d77
+  checksum: 10c0/a006d9e7ee4aa47bbc0a88b06c07d172b1409bc8cce7031f1b35cf6a0a46abe0e2643e6a603363b63b20b0ee46ec1e2d0571082da6c25da35c7d860182fa0977
   languageName: node
   linkType: hard
 
@@ -15179,10 +15150,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"nodemailer@npm:9.0.5, nodemailer@npm:^9.0.5":
-  version: 9.0.5
-  resolution: "nodemailer@npm:9.0.5"
-  checksum: 10c0/60f7a21497c98c0d275cd12c488af581ef6aee65db575026319ac249dcac210bdab20edf77fe3158176ed3910f70d8c46d89abcd74f57a7170302727e6d05ee3
+"nodemailer@npm:10.0.0, nodemailer@npm:^10.0.0":
+  version: 10.0.0
+  resolution: "nodemailer@npm:10.0.0"
+  checksum: 10c0/917fb3a5c75e2a86917212c3e9083713a1e9c77abbddd7ab52c94deadd5fbd3ee4fe12ce5d87c7a7bc31dc5b8a29a09532872cf08c9bc489b0b0a3f0aa12aa8b
   languageName: node
   linkType: hard
 
@@ -15602,7 +15573,6 @@ __metadata:
     "@types/natural-sort": "npm:^0.0.24"
     "@types/node": "npm:20.19.43"
     "@types/node-fetch": "npm:^2.6.13"
-    "@types/nodemailer": "npm:^6.4.23"
     "@types/pako": "npm:^2.0.4"
     "@types/passport-oauth2": "npm:^1.8.0"
     "@types/pluralize": "npm:^0.0.33"
@@ -15683,7 +15653,7 @@ __metadata:
     ipaddr.js: "npm:^2.4.0"
     is-printable-key-event: "npm:^1.0.0"
     iso-639-3: "npm:^3.0.1"
-    js-yaml: "npm:^4.3.1"
+    js-yaml: "npm:^4.3.2"
     jsdom: "npm:^22.1.0"
     jsonwebtoken: "npm:^9.0.3"
     katex: "npm:^0.16.45"
@@ -15699,7 +15669,7 @@ __metadata:
     koa-sslify: "npm:5.0.1"
     koa-useragent: "npm:^4.1.0"
     lint-staged: "npm:^16.4.0"
-    mailparser: "npm:^3.9.15"
+    mailparser: "npm:^3.9.20"
     mammoth: "npm:^1.11.0"
     markdown-it: "npm:^14.3.0"
     markdown-it-container: "npm:^3.0.0"
@@ -15712,7 +15682,7 @@ __metadata:
     msw: "npm:^2.14.2"
     natural-sort: "npm:^1.0.0"
     node-fetch: "npm:2.7.0"
-    nodemailer: "npm:^9.0.5"
+    nodemailer: "npm:^10.0.0"
     nodemon: "npm:^3.1.14"
     octokit: "npm:^5.0.5"
     outline-icons: "npm:^4.6.0"
@@ -15812,7 +15782,7 @@ __metadata:
     vite: "npm:^8.1.5"
     vite-plugin-pwa: "npm:1.3.0"
     vite-tsconfig-paths: "npm:^6.1.1"
-    vitest: "npm:^4.1.10"
+    vitest: "npm:^4.1.11"
     winston: "npm:^3.17.0"
     ws: "npm:^7.5.13"
     y-prosemirror: "npm:^1.3.7"
@@ -20718,17 +20688,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"vitest@npm:^4.1.10":
-  version: 4.1.10
-  resolution: "vitest@npm:4.1.10"
+"vitest@npm:^4.1.11":
+  version: 4.1.11
+  resolution: "vitest@npm:4.1.11"
   dependencies:
-    "@vitest/expect": "npm:4.1.10"
-    "@vitest/mocker": "npm:4.1.10"
-    "@vitest/pretty-format": "npm:4.1.10"
-    "@vitest/runner": "npm:4.1.10"
-    "@vitest/snapshot": "npm:4.1.10"
-    "@vitest/spy": "npm:4.1.10"
-    "@vitest/utils": "npm:4.1.10"
+    "@vitest/expect": "npm:4.1.11"
+    "@vitest/mocker": "npm:4.1.11"
+    "@vitest/pretty-format": "npm:4.1.11"
+    "@vitest/runner": "npm:4.1.11"
+    "@vitest/snapshot": "npm:4.1.11"
+    "@vitest/spy": "npm:4.1.11"
+    "@vitest/utils": "npm:4.1.11"
     es-module-lexer: "npm:^2.0.0"
     expect-type: "npm:^1.3.0"
     magic-string: "npm:^0.30.21"
@@ -20746,12 +20716,12 @@ __metadata:
     "@edge-runtime/vm": "*"
     "@opentelemetry/api": ^1.9.0
     "@types/node": ^20.0.0 || ^22.0.0 || >=24.0.0
-    "@vitest/browser-playwright": 4.1.10
-    "@vitest/browser-preview": 4.1.10
-    "@vitest/browser-webdriverio": 4.1.10
-    "@vitest/coverage-istanbul": 4.1.10
-    "@vitest/coverage-v8": 4.1.10
-    "@vitest/ui": 4.1.10
+    "@vitest/browser-playwright": 4.1.11
+    "@vitest/browser-preview": 4.1.11
+    "@vitest/browser-webdriverio": 4.1.11
+    "@vitest/coverage-istanbul": 4.1.11
+    "@vitest/coverage-v8": 4.1.11
+    "@vitest/ui": 4.1.11
     happy-dom: "*"
     jsdom: "*"
     vite: ^6.0.0 || ^7.0.0 || ^8.0.0
@@ -20782,7 +20752,7 @@ __metadata:
       optional: false
   bin:
     vitest: ./vitest.mjs
-  checksum: 10c0/ff07294a57f9c62f3b503f7cf88a52ee0753ed26389a49cda430387a3898f39d80af47180b0af19e27acab5bd11ae95706bd4b44ce8befc97d3ae49af6ca4fc1
+  checksum: 10c0/3fa0948cf74adcccc8cbcdb4e6d30ada6933bdfb1816ff99200f3d3b689325b37dc483b22535b57b6d911f7a7b64eaa6a5f8da1606cfe7f2466f48000c21e296
   languageName: node
   linkType: hard
 

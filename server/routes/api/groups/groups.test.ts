@@ -607,6 +607,59 @@ describe("#groups.delete", () => {
   });
 });
 
+describe("#groups.deleteAll", () => {
+  it("should require admin", async () => {
+    const user = await buildUser();
+    const authProvider = (await AuthenticationProvider.findOne({
+      where: { teamId: user.teamId },
+    }))!;
+    const res = await server.post("/api/groups.deleteAll", user, {
+      body: {
+        authenticationProviderId: authProvider.id,
+      },
+    });
+    expect(res.status).toEqual(403);
+  });
+
+  it("deletes synced groups and emits a delete event for each", async () => {
+    const user = await buildAdmin();
+    const authProvider = (await AuthenticationProvider.findOne({
+      where: { teamId: user.teamId },
+    }))!;
+    const synced = await buildGroup({ teamId: user.teamId });
+    const unsynced = await buildGroup({ teamId: user.teamId });
+    await ExternalGroup.create({
+      externalId: "ext-1",
+      name: synced.name,
+      groupId: synced.id,
+      authenticationProviderId: authProvider.id,
+      teamId: user.teamId,
+    });
+
+    const res = await server.post("/api/groups.deleteAll", user, {
+      body: {
+        authenticationProviderId: authProvider.id,
+      },
+    });
+    const body = await res.json();
+    expect(res.status).toEqual(200);
+    expect(body.success).toEqual(true);
+
+    await synced.reload({ paranoid: false });
+    await unsynced.reload();
+    expect(synced.deletedAt).toBeTruthy();
+    expect(unsynced.deletedAt).toBeNull();
+
+    const events = await Event.findAll({
+      where: {
+        name: "groups.delete",
+        teamId: user.teamId,
+      },
+    });
+    expect(events.map((event) => event.modelId)).toEqual([synced.id]);
+  });
+});
+
 describe("#groups.memberships", () => {
   it("should return members in a group", async () => {
     const user = await buildUser();
@@ -629,6 +682,32 @@ describe("#groups.memberships", () => {
     expect(body.data.users[0].id).toEqual(user.id);
     expect(body.data.groupMemberships.length).toEqual(1);
     expect(body.data.groupMemberships[0].user.id).toEqual(user.id);
+  });
+
+  it("should return the user that added each member", async () => {
+    const admin = await buildAdmin();
+    const user = await buildUser({ teamId: admin.teamId });
+    const group = await buildGroup({
+      teamId: admin.teamId,
+    });
+    await group.$add("user", user, {
+      through: {
+        createdById: admin.id,
+      },
+    });
+    const res = await server.post("/api/groups.memberships", user, {
+      body: {
+        id: group.id,
+      },
+    });
+    const body = await res.json();
+    expect(res.status).toEqual(200);
+    expect(body.data.groupMemberships.length).toEqual(1);
+    expect(body.data.groupMemberships[0].createdById).toEqual(admin.id);
+    expect(body.data.groupMemberships[0].createdAt).toBeTruthy();
+    expect(body.data.users.map((u: { id: string }) => u.id).sort()).toEqual(
+      [admin.id, user.id].sort()
+    );
   });
 
   it("should allow filtering members in group by name", async () => {

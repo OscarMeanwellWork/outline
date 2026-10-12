@@ -227,6 +227,7 @@ function SidebarLink({
 
   return (
     <Link
+      as={NavLink}
       $isActiveDrop={isActiveDrop}
       $isDraft={isDraft}
       $disabled={disabled}
@@ -243,7 +244,6 @@ function SidebarLink({
       to={to!}
       href={href}
       className={className}
-      // @ts-expect-error spread props cause overload mismatch with styled NavLink
       ref={ref}
       {...rest}
     >
@@ -269,15 +269,15 @@ const Content = styled.span`
   min-width: 0;
 `;
 
+// Stays over the icon while invisible so that a tap on the icon toggles, even
+// on touch devices where there is no hover to reveal it first.
 const HiddenDisclosure = styled(Disclosure)`
-  position: inherit;
   inset-inline-start: initial;
-  display: none;
+  opacity: 0;
   margin-inline-start: -2px;
-  margin-inline-end: 6px;
 `;
 
-const Link = styled(NavLink)<{
+const Link = styled.a<{
   $isActiveDrop?: boolean;
   $isDraft?: boolean;
   $disabled?: boolean;
@@ -339,12 +339,11 @@ const Link = styled(NavLink)<{
   &: ${hover},
   &:has([data-state="open"]) {
     ${HiddenDisclosure} {
-      display: block;
+      opacity: 1;
     }
     ${HiddenDisclosure} + ${IconWrapper} {
       visibility: hidden;
       opacity: 0;
-      width: 0;
     }
   }
 

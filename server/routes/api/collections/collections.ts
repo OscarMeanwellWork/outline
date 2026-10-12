@@ -1,4 +1,4 @@
-import Router from "koa-router";
+import Router from "@koa/router";
 import { randomUUID } from "node:crypto";
 import { truncate } from "es-toolkit/compat";
 import type { WhereOptions } from "sequelize";
@@ -312,7 +312,7 @@ router.post(
 
     if (!membership) {
       ctx.throw(
-        InvalidRequestError("This Group is not a part of the collection")
+        InvalidRequestError("This group is not a part of the collection")
       );
     }
 
